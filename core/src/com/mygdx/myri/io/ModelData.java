@@ -15,19 +15,26 @@ public class ModelData{
 	public Vector2 position, origin;
 	public Array<ModelData> children;
 	public int vertices = 10;
+	public float rotation;
 
 	public ModelData(){
 
 	}
+	
+	public ModelData(PartWidget p){
+		name = p.namefield.getText();
+		origin = p.origin;
+		rotation = p.rotation;
+		position = new Vector2(p.getX() + p.texture.texture.getWidth()*5 - Gdx.graphics.getWidth()/2, p.getY() + p.texture.texture.getHeight()*5 - Gdx.graphics.getHeight()/2);
+	}
 
 	public SoftModel asModel(){
 		Texture texture = Textures.get(name);
-		SoftModel model = new SoftModel(texture, vertices, 1);
+		SoftModel model = new SoftModel(texture, vertices);
 		model.setName(name);
+		model.baserotation = rotation;
 		Vector2 v = position;
 		v.scl(0.1f).sub(0, 10);
-		//v.x = (int)(v.x+0.5f);
-		//v.y = (int)v.y;
 		model.getPosition().set(v);
 		if(origin != null)
 		model.getOrigin().set(origin).scl(0.1f);
@@ -46,8 +53,8 @@ public class ModelData{
 
 	public PartWidget asWidget(){
 		PartWidget widget = new PartWidget();
-		widget.field.setText(name);
-		widget.field.fire(new ChangeListener.ChangeEvent());
+		widget.namefield.setText(name);
+		widget.namefield.fire(new ChangeListener.ChangeEvent());
 		if(origin != null)
 		widget.origin.set(origin);
 		widget.setPosition(Gdx.graphics.getWidth() / 2 + position.x - widget.texture.texture.getWidth()*5, Gdx.graphics.getHeight() / 2 + position.y - widget.texture.texture.getHeight()*5);

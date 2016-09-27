@@ -6,7 +6,6 @@ import io.anuke.gdxutils.modules.Module;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -88,24 +87,19 @@ public class Editor extends Module<Myri>{
 				if(part == null) return;
 				System.out.println("File written.");
 				Array<ModelData> children = new Array<ModelData>();
-				ModelData main = new ModelData();
+				ModelData main = new ModelData(part);
 				for(Actor actor : stage.getActors()){
 					if(!(actor instanceof PartWidget)) continue;
 				
 					PartWidget p = (PartWidget)actor;
 					ModelData data = null;
 					if(p != part){
-						data = new ModelData();
+						data = new ModelData(p);
 						children.add(data);
 					}else{
 						data = main;
 						data.children = children;
 					}
-					data.name = p.field.getText();
-					data.origin = p.origin;
-					data.position = new Vector2(p.getX() + p.texture.texture.getWidth()*5 - Gdx.graphics.getWidth()/2, p.getY() + p.texture.texture.getHeight()*5 - Gdx.graphics.getHeight()/2);
-					
-					
 				}
 				String string = json.toJson(main);
 				Gdx.files.local("model1.json").writeString(string, false);
