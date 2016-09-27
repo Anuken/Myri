@@ -1,0 +1,23 @@
+#ifdef GL_ES
+#define LOWP lowp
+    precision mediump float;
+#else
+    #define LOWP
+#endif
+
+varying vec2 v_texCoords;
+
+uniform sampler2D u_texture;
+
+float round(float i, float s){
+	return int(i/s)*s;
+}
+
+void main(){
+	float s = 0.005f;
+	vec2 uv = v_texCoords;
+	uv.x = round(uv.x, s);
+	uv.y = round(uv.y, s);
+
+    gl_FragColor = texture2D(u_texture, uv);
+}
