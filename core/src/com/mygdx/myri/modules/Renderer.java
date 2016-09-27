@@ -1,6 +1,7 @@
 package com.mygdx.myri.modules;
 
 import io.anuke.gdxutils.graphics.Hue;
+import io.anuke.gdxutils.graphics.PixmapUtils;
 import io.anuke.gdxutils.graphics.Textures;
 import io.anuke.gdxutils.modules.Module;
 import io.anuke.utils.MiscUtils;
@@ -8,10 +9,10 @@ import io.anuke.utils.io.GifRecorder;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
@@ -41,12 +42,36 @@ public class Renderer extends Module<Myri>{
 		//processor.addEffect(effect);
 		try{
 			model = new Json().fromJson(ModelData.class, Gdx.files.local("model1.json")).asModel();
+			Array<SoftModel> additions = new Array<SoftModel>();
+			Array<SoftModel> removals = new Array<SoftModel>();
+			for(SoftModel child : model.getChildren()){
+				if(!child.rotated) continue;
+				removals.add(child);
+				Texture tex = child.getTexture();
+				tex.getTextureData().prepare();
+				Pixmap pixmap = tex.getTextureData().consumePixmap();
+				Pixmap rotated = PixmapUtils.rotate(pixmap, 90);
+				tex.dispose();
+				pixmap.dispose();
+				
+				Texture newtex = new Texture(rotated);
+				SoftModel nmodel = new SoftModel(newtex, child.getV());
+				nmodel.setName(child.getName());
+				nmodel.getOrigin().set(child.getOrigin());
+				nmodel.getPosition().set(child.getPosition());
+				nmodel.updateTransformedPosition();
+				nmodel.rotated = true;
+				additions.add(nmodel);
+			}
+			model.getChildren().removeAll(removals, true);
+			model.getChildren().addAll(additions);
+			
 		}catch(Exception e){
 			model = new SoftModel(Textures.get("body"), 1);
 			e.printStackTrace();
 		}
 
-		//renderer.debug = false;
+		renderer.debug = false;
 
 	}
 

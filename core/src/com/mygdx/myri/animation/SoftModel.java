@@ -20,7 +20,8 @@ public class SoftModel{
 	private int vw = 20;
 	private Vector2[] bones;
 	private Array<SoftModel> children = new Array<SoftModel>();
-	public float rotation, baserotation;
+	public float rotation;
+	public boolean rotated;
 
 	public SoftModel(Texture texture, int vw){
 		this.texture = texture;
@@ -30,6 +31,10 @@ public class SoftModel{
 			bones[i] = new Vector2();
 		tregion = new TextureRegion(texture);
 		resetVertices(defaultVertices());
+	}
+	
+	public int getV(){
+		return vw;
 	}
 
 	public String getName(){

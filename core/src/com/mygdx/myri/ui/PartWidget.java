@@ -8,13 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.VisTextField.TextFieldFilter;
 
 public class PartWidget extends VisTable{
 	public PartTexture texture;
-	public VisTextField namefield, rotfield;
+	public VisTextField namefield;
 	public Vector2 origin = new Vector2();
-	public int rotation;
+	public boolean rotation;
 	 
 	public PartWidget(){
 		bottom().left();
@@ -36,11 +35,10 @@ public class PartWidget extends VisTable{
 				}
 			}
 		});
-		rotfield = new VisTextField("0");
-		rotfield.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		rotfield.addListener(new ChangeListener(){
+		VisCheckBox rotated = new VisCheckBox("Rotated");
+		rotated.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
-				rotation = rotfield.getText().isEmpty() ? 0 : Integer.parseInt(rotfield.getText());
+				rotation = rotated.isChecked();
 			}
 		});
 		VisImageButton up = new VisImageButton(VisUI.getSkin().getDrawable("icon-arrow-right"));
@@ -60,7 +58,7 @@ public class PartWidget extends VisTable{
 		add(down).size(namefield.getPrefHeight()).growX();
 		add(up).size(namefield.getPrefHeight()).growX();		
 		add(namefield).growX().row();
-		add(rotfield).growX().colspan(3).row();
+		add(rotated).growX().colspan(3).row();
 		
 		add(texture).align(Align.bottomLeft).colspan(3);
 		

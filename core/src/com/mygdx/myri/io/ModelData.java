@@ -15,7 +15,7 @@ public class ModelData{
 	public Vector2 position, origin;
 	public Array<ModelData> children;
 	public int vertices = 10;
-	public float rotation;
+	public boolean rotation;
 
 	public ModelData(){
 
@@ -32,7 +32,7 @@ public class ModelData{
 		Texture texture = Textures.get(name);
 		SoftModel model = new SoftModel(texture, vertices);
 		model.setName(name);
-		model.baserotation = rotation;
+		model.rotated = rotation;
 		Vector2 v = position;
 		v.scl(0.1f).sub(0, 10);
 		model.getPosition().set(v);

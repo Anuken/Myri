@@ -90,12 +90,16 @@ public class SoftModelRenderer{
 		}
 		
 		polybatch.getTransformMatrix().scale(10f, 10f, 1f);
-		polybatch.getTransformMatrix().rotate(new Vector3(0,0,1), model.rotation);
+		polybatch.getTransformMatrix().rotate(new Vector3(0,0,1), model.rotation );
 		
 		polybatch.begin();
 		Vector2 offset = Vector2.Zero;
 		if(parent != null) offset = model.getOrigin();
-		polybatch.draw(model.getRegion(), -offset.x, -offset.y, model.getTexture().getWidth(), model.getTexture().getHeight());
+		if(model.rotated){
+			polybatch.draw(model.getRegion(), -offset.x, -offset.y + 0.7f, 0,0,model.getTexture().getWidth(), model.getTexture().getHeight(),1,1, -90);
+		}else{
+			polybatch.draw(model.getRegion(), -offset.x, -offset.y, model.getTexture().getWidth(), model.getTexture().getHeight());
+		}
 		
 		for(SoftModel child : model.getChildren()){
 			renderModel(child, model);
