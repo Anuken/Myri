@@ -14,10 +14,10 @@ float round(float i, float s){
 }
 
 void main(){
-	float s = 0.005f;
+	float s = 1.0/1440*10;
 	vec2 uv = v_texCoords;
-	uv.x = round(uv.x, s);
-	uv.y = round(uv.y, s);
+	uv.x = round(uv.x, 1.0/1440*10);
+	uv.y = round(uv.y, 1.0/900*10);
 
     gl_FragColor = texture2D(u_texture, uv);
 }

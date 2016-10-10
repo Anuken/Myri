@@ -1,8 +1,5 @@
 package com.mygdx.myri.ui;
 
-import io.anuke.gdxutils.graphics.ShapeUtils;
-import io.anuke.gdxutils.graphics.Textures;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -12,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.myri.modules.Editor;
+
+import io.anuke.ucore.graphics.ShapeUtils;
+import io.anuke.ucore.graphics.Textures;
 
 public class PartTexture extends Actor{
 	public Texture texture;

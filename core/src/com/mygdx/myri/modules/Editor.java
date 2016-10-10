@@ -1,16 +1,11 @@
 package com.mygdx.myri.modules;
 
-import io.anuke.gdxutils.graphics.ShapeUtils;
-import io.anuke.gdxutils.graphics.Textures;
-import io.anuke.gdxutils.modules.Module;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.VisUI.SkinScale;
@@ -21,13 +16,17 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooser.Mode;
 import com.mygdx.myri.Myri;
 import com.mygdx.myri.io.ModelData;
+import com.mygdx.myri.io.Resources;
 import com.mygdx.myri.ui.PartWidget;
+
+import io.anuke.ucore.graphics.ShapeUtils;
+import io.anuke.ucore.graphics.Textures;
+import io.anuke.ucore.modules.Module;
 
 public class Editor extends Module<Myri>{
 	public static Editor i;
 	Stage stage = new Stage();
 	FileChooser chooser;
-	Json json = new Json();
 	PartWidget part;
 	public PartWidget selected;
 	public VisCheckBox vbox;
@@ -101,7 +100,7 @@ public class Editor extends Module<Myri>{
 						data.children = children;
 					}
 				}
-				String string = json.toJson(main);
+				String string = Resources.json().toJson(main);
 				Gdx.files.local("model1.json").writeString(string, false);
 			}
 
@@ -112,7 +111,7 @@ public class Editor extends Module<Myri>{
 		table.add(save);
 
 		try{
-			ModelData data = json.fromJson(ModelData.class, Gdx.files.local("model1.json"));
+			ModelData data = Resources.json().fromJson(ModelData.class, Gdx.files.local("model1.json"));
 			PartWidget w = data.asWidget();
 			stage.addActor(w);
 			for(ModelData d : data.children)

@@ -1,7 +1,5 @@
 package com.mygdx.myri.io;
 
-import io.anuke.gdxutils.graphics.Textures;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -10,12 +8,14 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.myri.animation.SoftModel;
 import com.mygdx.myri.ui.PartWidget;
 
+import io.anuke.ucore.graphics.Textures;
+
 public class ModelData{
 	public String name;
 	public Vector2 position, origin;
 	public Array<ModelData> children;
 	public int vertices = 10;
-	public boolean rotation;
+	public boolean side, rotate;
 
 	public ModelData(){
 
@@ -24,7 +24,7 @@ public class ModelData{
 	public ModelData(PartWidget p){
 		name = p.namefield.getText();
 		origin = p.origin;
-		rotation = p.rotation;
+		side = p.rotation;
 		position = new Vector2(p.getX() + p.texture.texture.getWidth()*5 - Gdx.graphics.getWidth()/2, p.getY() + p.texture.texture.getHeight()*5 - Gdx.graphics.getHeight()/2);
 	}
 
@@ -32,7 +32,8 @@ public class ModelData{
 		Texture texture = Textures.get(name);
 		SoftModel model = new SoftModel(texture, vertices);
 		model.setName(name);
-		model.rotated = rotation;
+		model.side = side;
+		model.rotate = rotate;
 		Vector2 v = position;
 		v.scl(0.1f).sub(0, 10);
 		model.getPosition().set(v);

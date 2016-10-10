@@ -21,7 +21,8 @@ public class SoftModel{
 	private Vector2[] bones;
 	private Array<SoftModel> children = new Array<SoftModel>();
 	public float rotation;
-	public boolean rotated;
+	public boolean side; //side vertices/bones
+	public boolean rotate;
 
 	public SoftModel(Texture texture, int vw){
 		this.texture = texture;
@@ -160,7 +161,9 @@ public class SoftModel{
 			sub.setLength(rorig.y);
 			float angle = sub.angle();
 
-			if(child.name.equals("tail")) child.rotation = angle;
+			if(child.rotate){
+				child.rotation = angle;
+			}
 
 			sub.rotate(child.getPosition().y < 0 ? -90 : 90);
 			sub.add(rorig.x, bone2.y);

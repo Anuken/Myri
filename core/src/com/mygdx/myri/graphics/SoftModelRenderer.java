@@ -95,7 +95,7 @@ public class SoftModelRenderer{
 		polybatch.begin();
 		Vector2 offset = Vector2.Zero;
 		if(parent != null) offset = model.getOrigin();
-		if(model.rotated){
+		if(model.side){
 			polybatch.draw(model.getRegion(), -offset.x, -offset.y + 0.7f, 0,0,model.getTexture().getWidth(), model.getTexture().getHeight(),1,1, -90);
 		}else{
 			polybatch.draw(model.getRegion(), -offset.x, -offset.y, model.getTexture().getWidth(), model.getTexture().getHeight());

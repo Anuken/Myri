@@ -1,13 +1,16 @@
 package com.mygdx.myri.ui;
 
-import io.anuke.gdxutils.graphics.Textures;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextField;
+
+import io.anuke.ucore.graphics.Textures;
 
 public class PartWidget extends VisTable{
 	public PartTexture texture;
