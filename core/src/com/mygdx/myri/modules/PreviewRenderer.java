@@ -19,13 +19,13 @@ import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;
 
-public class Renderer extends Module<Myri>{
+public class PreviewRenderer extends Module<Myri>{
 	public SoftModel model;
 	public SpriteBatch batch = new SpriteBatch();
 	public SoftModelRenderer renderer = new SoftModelRenderer();
 	public PostProcessor processor;
 	// public GifRecorder recorder = new GifRecorder(batch);
-	public boolean editMode = true;
+	public boolean editMode = false;
 	WalkAnimation walk = new WalkAnimation();
 
 	{
@@ -76,7 +76,7 @@ public class Renderer extends Module<Myri>{
 			renderer.render(model);
 
 		if(editMode)
-			getModule(Editor.class).stage.draw();
+			getModule(ModelEditor.class).stage.draw();
 
 		batch.begin();
 		batch.draw(VisUI.getSkin().getRegion("white"), Gdx.graphics.getWidth() / 2 - 2,

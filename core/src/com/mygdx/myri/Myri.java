@@ -1,20 +1,23 @@
 package com.mygdx.myri;
 
-import com.mygdx.myri.modules.Editor;
+import com.mygdx.myri.modules.ModelEditor;
 import com.mygdx.myri.modules.Input;
-import com.mygdx.myri.modules.Renderer;
+import com.mygdx.myri.modules.LevelEditor;
+import com.mygdx.myri.modules.PreviewRenderer;
 import com.mygdx.myri.modules.WorldRenderer;
 
 import io.anuke.ucore.modules.ModuleController;
 
 public class Myri extends ModuleController<Myri>{
-	boolean edit;
+	int type = 1;
 
 	@Override
 	public void init(){
-		if(edit){
-			addModule(Editor.class);
-			addModule(Renderer.class);
+		if(type == 0){
+			addModule(ModelEditor.class);
+			addModule(PreviewRenderer.class);
+		}else if(type == 1){
+			addModule(LevelEditor.class);
 		}else{
 			addModule(WorldRenderer.class);
 			addModule(Input.class);

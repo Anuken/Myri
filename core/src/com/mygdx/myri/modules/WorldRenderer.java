@@ -1,14 +1,11 @@
 package com.mygdx.myri.modules;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.mygdx.myri.Myri;
 
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.modules.Module;
 
 public class WorldRenderer extends Module<Myri>{
+	/*
 	public OrthogonalTiledMapRenderer trenderer;
 	public TiledMap map;
 
@@ -22,4 +19,5 @@ public class WorldRenderer extends Module<Myri>{
 	public void update(){
 		trenderer.render();
 	}
+	*/
 }

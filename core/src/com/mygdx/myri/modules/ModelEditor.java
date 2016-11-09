@@ -23,8 +23,8 @@ import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;
 
-public class Editor extends Module<Myri>{
-	public static Editor i;
+public class ModelEditor extends Module<Myri>{
+	public static ModelEditor i;
 	Stage stage = new Stage();
 	FileChooser chooser;
 	PartWidget part;
@@ -32,7 +32,7 @@ public class Editor extends Module<Myri>{
 	public VisCheckBox vbox;
 	boolean setup = false;
 
-	public Editor(){
+	public ModelEditor(){
 		i=this;
 		Textures.load("textures/parts1/");
 		VisUI.load(SkinScale.X2);

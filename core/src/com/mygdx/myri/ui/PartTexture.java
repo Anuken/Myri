@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.mygdx.myri.modules.Editor;
+import com.mygdx.myri.modules.ModelEditor;
 
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
@@ -32,11 +32,11 @@ public class PartTexture extends Actor{
 				lx = x;
 				ly = y;
 				part.toFront();
-				if(Editor.i.selected != null && !Editor.i.vbox.isChecked()){
-					Editor.i.selected.setShown(false);
+				if(ModelEditor.i.selected != null && !ModelEditor.i.vbox.isChecked()){
+					ModelEditor.i.selected.setShown(false);
 				}
 				
-				Editor.i.selected = part;
+				ModelEditor.i.selected = part;
 				part.setShown(true);
 				
 				return true;
