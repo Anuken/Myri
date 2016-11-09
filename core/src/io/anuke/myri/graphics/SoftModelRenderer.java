@@ -1,4 +1,4 @@
-package com.mygdx.myri.graphics;
+package io.anuke.myri.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.myri.animation.SoftModel;
+
+import io.anuke.myri.animation.SoftModel;
 
 public class SoftModelRenderer{
 	public boolean debug = true;

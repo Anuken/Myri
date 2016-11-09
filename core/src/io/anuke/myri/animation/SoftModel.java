@@ -1,4 +1,4 @@
-package com.mygdx.myri.animation;
+package io.anuke.myri.animation;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonRegion;

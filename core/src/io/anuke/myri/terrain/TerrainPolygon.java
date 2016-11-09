@@ -1,5 +1,6 @@
-package com.mygdx.myri.terrain;
+package io.anuke.myri.terrain;
 
+import java.awt.geom.Area;
 import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.Color;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ShortArray;
 
+import io.anuke.ucore.Geometry;
 import io.anuke.ucore.graphics.ShapeUtils;
 
 public class TerrainPolygon implements Iterable<Vector2>{
@@ -18,13 +20,17 @@ public class TerrainPolygon implements Iterable<Vector2>{
 	public PolygonRegion region;
 	public EarClippingTriangulator tri = new EarClippingTriangulator();
 	public float x, y;
+	public Area area = new Area();
 	
 	public TerrainPolygon(Texture tex, float[] vertices){
 		ShortArray shorts = tri.computeTriangles(vertices);
 		region = new PolygonRegion(new TextureRegion(tex), vertices, shorts.toArray());
+		
+		area.add(new Area(Geometry.polygon(vertices)));
+		
 	}
 	
-	public void setVertices(float[] vertices){
+	private void setVertices(float[] vertices){
 		ShortArray shorts = tri.computeTriangles(vertices);
 		region = new PolygonRegion(new TextureRegion(this.region.getRegion()), vertices, shorts.toArray());
 	}
@@ -39,6 +45,10 @@ public class TerrainPolygon implements Iterable<Vector2>{
 		
 		batch.setColor(Color.YELLOW);
 		ShapeUtils.polygon(batch, region.getVertices(), x, y, 1);
+	}
+	
+	public void update(){
+		setVertices(Geometry.array(area.getPathIterator(null)));
 	}
 	
 	public float[] getVertices(){

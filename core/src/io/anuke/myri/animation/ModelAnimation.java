@@ -1,4 +1,4 @@
-package com.mygdx.myri.animation;
+package io.anuke.myri.animation;
 
 import com.badlogic.gdx.Gdx;
 

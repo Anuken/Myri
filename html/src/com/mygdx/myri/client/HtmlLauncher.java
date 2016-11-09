@@ -3,7 +3,8 @@ package com.mygdx.myri.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.mygdx.myri.Myri;
+
+import io.anuke.myri.Myri;
 
 public class HtmlLauncher extends GwtApplication {
 

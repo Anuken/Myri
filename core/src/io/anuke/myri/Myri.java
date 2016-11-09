@@ -1,11 +1,10 @@
-package com.mygdx.myri;
+package io.anuke.myri;
 
-import com.mygdx.myri.modules.ModelEditor;
-import com.mygdx.myri.modules.Input;
-import com.mygdx.myri.modules.LevelEditor;
-import com.mygdx.myri.modules.PreviewRenderer;
-import com.mygdx.myri.modules.WorldRenderer;
-
+import io.anuke.myri.modules.Input;
+import io.anuke.myri.modules.LevelEditor;
+import io.anuke.myri.modules.ModelEditor;
+import io.anuke.myri.modules.PreviewRenderer;
+import io.anuke.myri.modules.WorldRenderer;
 import io.anuke.ucore.modules.ModuleController;
 
 public class Myri extends ModuleController<Myri>{

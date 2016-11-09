@@ -1,4 +1,4 @@
-package com.mygdx.myri.modules;
+package io.anuke.myri.modules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 import com.kotcrab.vis.ui.VisUI;
-import com.mygdx.myri.Myri;
-import com.mygdx.myri.animation.SoftModel;
-import com.mygdx.myri.animation.WalkAnimation;
-import com.mygdx.myri.graphics.SoftModelRenderer;
-import com.mygdx.myri.io.Resources;
 
+import io.anuke.myri.Myri;
+import io.anuke.myri.animation.SoftModel;
+import io.anuke.myri.animation.WalkAnimation;
+import io.anuke.myri.graphics.SoftModelRenderer;
+import io.anuke.myri.io.Resources;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;

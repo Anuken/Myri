@@ -1,12 +1,12 @@
-package com.mygdx.myri.io;
+package io.anuke.myri.io;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.mygdx.myri.animation.SoftModel;
 
+import io.anuke.myri.animation.SoftModel;
 import io.anuke.ucore.graphics.PixmapUtils;
 
 public class Resources{

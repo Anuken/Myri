@@ -1,13 +1,13 @@
-package com.mygdx.myri.io;
+package io.anuke.myri.io;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.myri.animation.SoftModel;
-import com.mygdx.myri.ui.PartWidget;
 
+import io.anuke.myri.animation.SoftModel;
+import io.anuke.myri.ui.PartWidget;
 import io.anuke.ucore.graphics.Textures;
 
 public class ModelData{

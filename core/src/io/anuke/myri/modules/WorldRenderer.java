@@ -1,7 +1,6 @@
-package com.mygdx.myri.modules;
+package io.anuke.myri.modules;
 
-import com.mygdx.myri.Myri;
-
+import io.anuke.myri.Myri;
 import io.anuke.ucore.modules.Module;
 
 public class WorldRenderer extends Module<Myri>{

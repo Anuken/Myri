@@ -1,4 +1,4 @@
-package com.mygdx.myri.shaders;
+package io.anuke.myri.shaders;
 
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.bitfire.postprocessing.PostProcessorEffect;

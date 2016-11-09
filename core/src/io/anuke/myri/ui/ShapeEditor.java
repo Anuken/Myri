@@ -1,4 +1,4 @@
-package com.mygdx.myri.ui;
+package io.anuke.myri.ui;
 
 import com.badlogic.gdx.math.Vector2;
 

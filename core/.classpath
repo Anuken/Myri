@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libgdx-contribs-postprocessing"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libgdx-contribs-utils"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/uCore-Tools"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

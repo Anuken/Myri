@@ -1,4 +1,4 @@
-package com.mygdx.myri.shaders;
+package io.anuke.myri.shaders;
 
 import com.bitfire.postprocessing.filters.Filter;
 import com.bitfire.utils.ShaderLoader;

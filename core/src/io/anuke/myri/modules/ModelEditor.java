@@ -1,4 +1,4 @@
-package com.mygdx.myri.modules;
+package io.anuke.myri.modules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -14,11 +14,11 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooser.Mode;
-import com.mygdx.myri.Myri;
-import com.mygdx.myri.io.ModelData;
-import com.mygdx.myri.io.Resources;
-import com.mygdx.myri.ui.PartWidget;
 
+import io.anuke.myri.Myri;
+import io.anuke.myri.io.ModelData;
+import io.anuke.myri.io.Resources;
+import io.anuke.myri.ui.PartWidget;
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;

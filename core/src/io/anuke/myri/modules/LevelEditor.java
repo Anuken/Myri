@@ -1,4 +1,4 @@
-package com.mygdx.myri.modules;
+package io.anuke.myri.modules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -12,9 +12,9 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.VisUI.SkinScale;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.mygdx.myri.Myri;
-import com.mygdx.myri.ui.TerrainCanvas;
 
+import io.anuke.myri.Myri;
+import io.anuke.myri.ui.TerrainCanvas;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
