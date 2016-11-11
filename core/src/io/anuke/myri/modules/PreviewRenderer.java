@@ -3,7 +3,6 @@ package io.anuke.myri.modules;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bitfire.postprocessing.PostProcessor;
@@ -60,7 +59,6 @@ public class PreviewRenderer extends Module<Myri>{
 		processor.capture();
 
 		UCore.clearScreen(Color.BLACK);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		walk.update();
 		walk.animate(model);
@@ -91,6 +89,6 @@ public class PreviewRenderer extends Module<Myri>{
 	@Override
 	public void resize(int width, int height){
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-		renderer.resize(width, height);
+		//renderer.resize(width, height);
 	}
 }

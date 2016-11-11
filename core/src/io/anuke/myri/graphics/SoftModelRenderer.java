@@ -1,29 +1,31 @@
 package io.anuke.myri.graphics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.myri.animation.SoftModel;
+import io.anuke.ucore.Geometry;
 
 public class SoftModelRenderer{
 	public boolean debug = true;
 	private PolygonSpriteBatch polybatch = new PolygonSpriteBatch();
 	private ShapeRenderer shape = new ShapeRenderer();
-	private float dx = Gdx.graphics.getWidth() / 2;
-	private float dy = Gdx.graphics.getHeight() / 2;
+	private float scale = 1f;
+	//private float dx = Gdx.graphics.getWidth() / 2;
+	//private float dy = Gdx.graphics.getHeight() / 2;
 
 	public SoftModelRenderer(){
 		shape.setAutoShapeType(true);
 	}
 
 	public void render(SoftModel model){
-		dx = Gdx.graphics.getWidth() / 2;
-		dy = Gdx.graphics.getHeight() / 2;
+		//dx = Gdx.graphics.getWidth() / 2;
+		//dy = Gdx.graphics.getHeight() / 2;
 		
 		polybatch.begin();
 		renderModel(model, null);
@@ -39,24 +41,35 @@ public class SoftModelRenderer{
 	private void renderDebug(SoftModel model, SoftModel parent){
 
 		if(parent != null){
-			shape.getTransformMatrix().setToTranslation(dx + model.getTransformedPosition().x * 10, dy + model.getTransformedPosition().y * 10, 0);
+			shape.getTransformMatrix().setToTranslation(model.getTransformedPosition().x * scale, model.getTransformedPosition().y * scale, 0);
 		}else{
-			shape.getTransformMatrix().setToTranslation(dx + model.getPosition().x, dy + model.getPosition().y, 0);
+			shape.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale, 0);
 		}
 
-		shape.getTransformMatrix().scale(10f, 10f, 1f);
+		shape.getTransformMatrix().scale(scale, scale, 1f);
+		//shape.getTransformMatrix().rotate(new Vector3(1,0,0), model.side ? -90  : - 0);
 		shape.updateMatrices();
 
 		shape.setColor(Color.YELLOW);
 
 		//draw vertices
-		shape.polygon(model.getVertices());
-
+		Geometry.iteratePolySegments(model.getVertices(), (x,y,x2,y2)->{
+			if(!model.side){
+				shape.line(x, y, x2, y2);
+			}else{
+				shape.line(y, x, y2, x2);
+			}
+		});
+		
 		shape.setColor(Color.PURPLE);
 
 		//draw bones
 		for(int i = 0;i < model.getBones().length - 1;i ++){
-			shape.line(model.getBones()[i], model.getBones()[i + 1]);
+			if(!model.side){
+				shape.line(model.getBones()[i], model.getBones()[i + 1]);
+			}else{
+				shape.line(model.getBones()[i].y, model.getBones()[i].x, model.getBones()[i+1].y, model.getBones()[i+1].x);
+			}
 		}
 
 		shape.set(ShapeType.Filled);
@@ -67,14 +80,19 @@ public class SoftModelRenderer{
 		for(int i = 0;i < model.getVertices().length / 2;i ++){
 			float x = model.getVertices()[i * 2];
 			float y = model.getVertices()[i * 2 + 1];
-			shape.circle(x, y, 5 / 10f);
+			if(!model.side){
+				shape.circle(x, y, 5 / 10f);
+			}else{
+				shape.circle(y, x, 5 / 10f);
+			}
 		}
 
 		//draw bone points
 		shape.setColor(Color.BLUE);
 
 		for(int i = 0;i < model.getBones().length;i ++){
-			shape.circle(model.getBones()[i].x, model.getBones()[i].y, 6 / 10f);
+			
+			shape.circle(!model.side ? model.getBones()[i].x : model.getBones()[i].y, !model.side ? model.getBones()[i].y : model.getBones()[i].x, 6 / 10f);
 		}
 		
 		for(SoftModel child : model.getChildren()){
@@ -85,19 +103,21 @@ public class SoftModelRenderer{
 	private void renderModel(SoftModel model, SoftModel parent){
 		polybatch.end();
 		if(parent != null){
-			polybatch.getTransformMatrix().setToTranslation(dx + model.getTransformedPosition().x * 10 + model.getOrigin().x*10, dy + model.getTransformedPosition().y * 10 + model.getOrigin().y*10, 0);
+			polybatch.getTransformMatrix()
+			.setToTranslation(model.getTransformedPosition().x * scale + model.getOrigin().x*scale, 
+					model.getTransformedPosition().y * scale + model.getOrigin().y*scale, 0);
 		}else{
-			polybatch.getTransformMatrix().setToTranslation(dx + model.getPosition().x, dy + model.getPosition().y, 0);
+			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale, 0);
 		}
 		
-		polybatch.getTransformMatrix().scale(10f, 10f, 1f);
+		polybatch.getTransformMatrix().scale(scale, scale, 1f);
 		polybatch.getTransformMatrix().rotate(new Vector3(0,0,1), model.rotation );
 		
 		polybatch.begin();
 		Vector2 offset = Vector2.Zero;
 		if(parent != null) offset = model.getOrigin();
 		if(model.side){
-			polybatch.draw(model.getRegion(), -offset.x, -offset.y + 0.7f, 0,0,model.getTexture().getWidth(), model.getTexture().getHeight(),1,1, -90);
+			polybatch.draw(model.getRegion(), -offset.x, -offset.y + 0.06f*scale, 0,0,model.getTexture().getWidth(), model.getTexture().getHeight(),1,1, -90);
 		}else{
 			polybatch.draw(model.getRegion(), -offset.x, -offset.y, model.getTexture().getWidth(), model.getTexture().getHeight());
 		}
@@ -106,10 +126,10 @@ public class SoftModelRenderer{
 			renderModel(child, model);
 		}
 	}
-
-	public void resize(int width, int height){
-		polybatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-		shape.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+	
+	public void setProjectionMatrix(Matrix4 matrix){
+		polybatch.setProjectionMatrix(matrix);
+		shape.setProjectionMatrix(matrix);
 		shape.updateMatrices();
 	}
 }

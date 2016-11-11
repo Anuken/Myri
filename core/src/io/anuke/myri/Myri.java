@@ -8,7 +8,7 @@ import io.anuke.myri.modules.WorldRenderer;
 import io.anuke.ucore.modules.ModuleController;
 
 public class Myri extends ModuleController<Myri>{
-	int type = 1;
+	int type = 2;
 
 	@Override
 	public void init(){

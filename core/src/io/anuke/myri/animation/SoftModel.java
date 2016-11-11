@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ShortArray;
 
 public class SoftModel{
 	private final static EarClippingTriangulator triangulator = new EarClippingTriangulator();
+	private final static Vector2 upper = new Vector2(), lower = new Vector2(), diff = new Vector2();
 	private String name;
 	private Vector2 position = new Vector2(), origin = new Vector2(), transformedPosition = new Vector2();
 	private Texture texture;
@@ -110,8 +111,8 @@ public class SoftModel{
 	public void updateBones(){
 		float yw = texture.getHeight() * scale;
 		float[] vertices = region.getVertices();
-		Vector2 upper = new Vector2(), lower = new Vector2();
-		Vector2 diff = new Vector2();
+		//super fancy resetting
+		upper.set(lower.set(diff.set(0,0)));
 
 		for(int i = 0;i <= vw;i ++){
 			Vector2 bone = bones[i];

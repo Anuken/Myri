@@ -35,7 +35,7 @@ public class ModelData{
 		model.side = side;
 		model.rotate = rotate;
 		Vector2 v = position;
-		v.scl(0.1f).sub(0, 10);
+		v.scl(0.1f);
 		model.getPosition().set(v);
 		if(origin != null)
 		model.getOrigin().set(origin).scl(0.1f);
@@ -43,7 +43,6 @@ public class ModelData{
 		if(children != null){
 			for(ModelData data : children){
 				SoftModel child = data.asModel();
-				child.getPosition().y += 10;
 				child.updateTransformedPosition();
 				model.addChild(child);
 			}
