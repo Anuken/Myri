@@ -1,5 +1,6 @@
 package io.anuke.myri.animation;
 
+import io.anuke.myri.graphics.SoftModel;
 
 public class WalkAnimation extends ModelAnimation{
 

@@ -10,8 +10,8 @@ import com.bitfire.utils.ShaderLoader;
 import com.kotcrab.vis.ui.VisUI;
 
 import io.anuke.myri.Myri;
-import io.anuke.myri.animation.SoftModel;
 import io.anuke.myri.animation.WalkAnimation;
+import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.Resources;
 import io.anuke.ucore.UCore;

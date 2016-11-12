@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 
-import io.anuke.myri.animation.SoftModel;
+import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.ui.PartWidget;
 import io.anuke.ucore.graphics.Textures;
 
@@ -44,6 +44,7 @@ public class ModelData{
 			for(ModelData data : children){
 				SoftModel child = data.asModel();
 				child.updateTransformedPosition();
+				child.getPosition().sub(model.getPosition());
 				model.addChild(child);
 			}
 		}

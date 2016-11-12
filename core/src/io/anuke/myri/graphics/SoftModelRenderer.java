@@ -1,5 +1,6 @@
 package io.anuke.myri.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -8,25 +9,18 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import io.anuke.myri.animation.SoftModel;
 import io.anuke.ucore.Geometry;
 
 public class SoftModelRenderer{
 	public boolean debug = true;
 	private PolygonSpriteBatch polybatch = new PolygonSpriteBatch();
 	private ShapeRenderer shape = new ShapeRenderer();
-	private float scale = 1f;
-	//private float dx = Gdx.graphics.getWidth() / 2;
-	//private float dy = Gdx.graphics.getHeight() / 2;
 
 	public SoftModelRenderer(){
 		shape.setAutoShapeType(true);
 	}
 
 	public void render(SoftModel model){
-		//dx = Gdx.graphics.getWidth() / 2;
-		//dy = Gdx.graphics.getHeight() / 2;
-		
 		polybatch.begin();
 		renderModel(model, null);
 		polybatch.end();
@@ -39,11 +33,14 @@ public class SoftModelRenderer{
 	}
 
 	private void renderDebug(SoftModel model, SoftModel parent){
-
+		float scale = model.getScale();
+		
+		
 		if(parent != null){
-			shape.getTransformMatrix().setToTranslation(model.getTransformedPosition().x * scale, model.getTransformedPosition().y * scale, 0);
+			shape.getTransformMatrix().setToTranslation(model.getTransformedPosition().x * scale + parent.getPosition().x, model.getTransformedPosition().y * scale + parent.getPosition().y, 0);
+		
 		}else{
-			shape.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale, 0);
+			shape.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale*2, 0);
 		}
 
 		shape.getTransformMatrix().scale(scale, scale, 1f);
@@ -54,6 +51,8 @@ public class SoftModelRenderer{
 
 		//draw vertices
 		Geometry.iteratePolySegments(model.getVertices(), (x,y,x2,y2)->{
+			Gdx.gl.glLineWidth(0.1f);
+			
 			if(!model.side){
 				shape.line(x, y, x2, y2);
 			}else{
@@ -101,13 +100,15 @@ public class SoftModelRenderer{
 	}
 
 	private void renderModel(SoftModel model, SoftModel parent){
+		float scale = model.getScale();
+		
 		polybatch.end();
 		if(parent != null){
 			polybatch.getTransformMatrix()
-			.setToTranslation(model.getTransformedPosition().x * scale + model.getOrigin().x*scale, 
-					model.getTransformedPosition().y * scale + model.getOrigin().y*scale, 0);
+			.setToTranslation((model.getTransformedPosition().x) * scale + parent.getPosition().x + model.getOrigin().x*scale, 
+					(model.getTransformedPosition().y) * scale  + parent.getPosition().y + model.getOrigin().y*scale, 0);
 		}else{
-			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale, 0);
+			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale*1, 0);
 		}
 		
 		polybatch.getTransformMatrix().scale(scale, scale, 1f);

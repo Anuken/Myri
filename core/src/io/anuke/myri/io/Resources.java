@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
-import io.anuke.myri.animation.SoftModel;
+import io.anuke.myri.graphics.SoftModel;
 import io.anuke.ucore.graphics.PixmapUtils;
 
 public class Resources{

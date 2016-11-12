@@ -1,4 +1,4 @@
-package io.anuke.myri.animation;
+package io.anuke.myri.graphics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonRegion;
@@ -16,7 +16,7 @@ public class SoftModel{
 	private Vector2 position = new Vector2(), origin = new Vector2(), transformedPosition = new Vector2();
 	private Texture texture;
 	private TextureRegion tregion;
-	private float scale = 1f;
+	private float scale = 2f;
 	private PolygonRegion region;
 	private int vw = 20;
 	private Vector2[] bones;
@@ -33,6 +33,18 @@ public class SoftModel{
 			bones[i] = new Vector2();
 		tregion = new TextureRegion(texture);
 		resetVertices(defaultVertices());
+	}
+	
+	public float getBoneSpacing(){
+		return (float)texture.getWidth()/vw;
+	}
+	
+	public float getScale(){
+		return scale;
+	}
+	
+	public void setScale(float scale){
+		this.scale = scale;
 	}
 	
 	public int getV(){
@@ -57,6 +69,10 @@ public class SoftModel{
 
 	public Vector2 getPosition(){
 		return position;
+	}
+	
+	public void setPosition(float x, float y){
+		position.set(x, y);
 	}
 
 	public Vector2 getOrigin(){
@@ -83,13 +99,20 @@ public class SoftModel{
 	public Array<SoftModel> getChildren(){
 		return children;
 	}
+	
+	public SoftModel getChild(String name){
+		for(SoftModel model : children)
+			if(model.getName().equals(name)) return model;
+		
+		return null;
+	}
 
 	public float getWidth(){
-		return texture.getWidth() * scale;
+		return texture.getWidth();
 	}
 
 	public float getHeight(){
-		return texture.getHeight() * scale;
+		return texture.getHeight();
 	}
 
 	public Vector2[] getBones(){
@@ -109,7 +132,7 @@ public class SoftModel{
 	}
 
 	public void updateBones(){
-		float yw = texture.getHeight() * scale;
+		float yw = texture.getHeight();
 		float[] vertices = region.getVertices();
 		//super fancy resetting
 		upper.set(lower.set(diff.set(0,0)));
@@ -141,7 +164,7 @@ public class SoftModel{
 		}
 
 		for(SoftModel child : children){
-			Vector2 rorig = child.getPosition().cpy().add(child.getOrigin()).add(position.x / 10f, position.y / 10f); //relative origin
+			Vector2 rorig = child.getPosition().cpy().add(child.getOrigin()); //relative origin
 
 			float s = (rorig.x + getWidth() / 2) / getWidth();
 
@@ -169,8 +192,6 @@ public class SoftModel{
 			sub.rotate(child.getPosition().y < 0 ? -90 : 90);
 			sub.add(rorig.x, bone2.y);
 			sub.sub(child.origin);
-			sub.sub(position.x * 0.1f, position.y * 0.1f);
-
 		}
 	}
 
@@ -178,7 +199,7 @@ public class SoftModel{
 		ShortArray triangles = triangulator.computeTriangles(vertices);
 		region = new PolygonRegion(tregion, vertices, triangles.toArray());
 		for(int i = 0;i < bones.length;i ++){
-			bones[i].x = (((float)i / (vw)) * texture.getWidth() * scale) - (texture.getWidth() * scale) / 2;
+			bones[i].x = (((float)i / (vw)) * texture.getWidth()) - (texture.getWidth()) / 2;
 			bones[i].y = 0;
 		}
 		setVerticeUVs();
@@ -186,8 +207,8 @@ public class SoftModel{
 
 	private float[] defaultVertices(){
 		FloatArray v = new FloatArray();
-		float xw = texture.getWidth() * scale;
-		float yw = texture.getHeight() * scale;
+		float xw = texture.getWidth();
+		float yw = texture.getHeight();
 
 		//bottom
 		for(int x = 0;x <= vw;x ++){
