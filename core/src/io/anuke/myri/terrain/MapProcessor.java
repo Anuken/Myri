@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import io.anuke.ucore.Noise;
 import io.anuke.ucore.graphics.PixmapUtils;
 import io.anuke.ucore.graphics.Textures;
+import io.anuke.ucore.noise.Noise;
 
 public class MapProcessor{
 	private boolean processing;

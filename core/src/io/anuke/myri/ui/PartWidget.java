@@ -18,9 +18,8 @@ public class PartWidget extends VisTable{
 	public Vector2 origin = new Vector2();
 	public boolean rotation;
 	 
-	public PartWidget(){
+	public PartWidget(boolean rotate){
 		bottom().left();
-		
 		
 		texture = new PartTexture(this,"body");
 		
@@ -38,7 +37,7 @@ public class PartWidget extends VisTable{
 				}
 			}
 		});
-		VisCheckBox rotated = new VisCheckBox("Rotated");
+		VisCheckBox rotated = new VisCheckBox("Rotated", rotate);
 		rotated.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
 				rotation = rotated.isChecked();

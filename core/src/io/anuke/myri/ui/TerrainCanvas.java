@@ -11,12 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.VisUI;
 
 import io.anuke.myri.terrain.TerrainPolygon;
-import io.anuke.ucore.Geometry;
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
+import io.anuke.ucore.util.Geometry;
 import io.anuke.utils.io.GifRecorder;
 
 public class TerrainCanvas extends Widget{
@@ -24,7 +23,7 @@ public class TerrainCanvas extends Widget{
 	private Array<TerrainPolygon> polygons = new Array<TerrainPolygon>();
 	private float dscale = 20;
 	private float screenscale = 2;
-	private float[] brush = Geometry.nGon(8, 20);
+	private float[] brush = Geometry.regPoly(8, 20);
 	private Area brusharea = new Area(Geometry.polygon(brush));
 	private float mousex, mousey;
 	private TerrainPolygon selected;
@@ -103,7 +102,7 @@ public class TerrainCanvas extends Widget{
 		
 		batch.end();
 		batch.begin();
-		recorder.update(VisUI.getSkin().getRegion("white"), Gdx.graphics.getDeltaTime());
+		recorder.update();
 		
 	}
 }

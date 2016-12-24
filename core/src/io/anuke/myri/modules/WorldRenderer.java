@@ -4,19 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
-import com.badlogic.gdx.physics.box2d.World;
 
 import io.anuke.myri.Myri;
+import io.anuke.myri.animation.ModelAnimation;
+import io.anuke.myri.animation.WalkAnimation;
 import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.Resources;
+import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.RendererModule;
 
@@ -27,12 +24,12 @@ public class WorldRenderer extends RendererModule<Myri>{
 	public SoftModelRenderer srenderer = new SoftModelRenderer();
 	public World world = new World(new Vector2(0, -200), true);
 	public SoftModel model;
+	ModelAnimation animation = new WalkAnimation();
 	Body playerbody;
 	Body leg1, leg2, leg3;
 	float accumulator;
 
 	public WorldRenderer() {
-		maximize();
 		cameraScale = 2f;
 		Textures.load("textures/parts1/");
 
@@ -145,11 +142,15 @@ public class WorldRenderer extends RendererModule<Myri>{
 		model.getPosition().set(playerbody.getPosition().x - 1, playerbody.getPosition().y + 9);
 		
 		float t = (float) Math.tan(playerbody.getAngle()) * model.getBoneSpacing();
+		t = UCore.clamp(t, -2f, 2f);
 		
 		for(int i = 0; i < model.getBones().length; i++){
 			model.getBones()[i].y = (i - model.getBones().length/2)*t;
+			//model.getBones()[i].x = i*model.getBoneSpacing() - model.getWidth()/2;
 		}
-
+		
+		animation.update(model);
+		
 		model.updateBones();
 
 		clearScreen();

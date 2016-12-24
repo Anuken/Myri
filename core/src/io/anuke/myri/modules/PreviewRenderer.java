@@ -24,12 +24,8 @@ public class PreviewRenderer extends Module<Myri>{
 	public SoftModelRenderer renderer = new SoftModelRenderer();
 	public PostProcessor processor;
 	// public GifRecorder recorder = new GifRecorder(batch);
-	public boolean editMode = false;
+	public boolean editMode = true;
 	WalkAnimation walk = new WalkAnimation();
-
-	{
-		UCore.maximizeWindow();
-	}
 
 	public void init(){
 		ShaderLoader.BasePath = "shaders/";
@@ -60,8 +56,7 @@ public class PreviewRenderer extends Module<Myri>{
 
 		UCore.clearScreen(Color.BLACK);
 
-		walk.update();
-		walk.animate(model);
+		//walk.update(model);
 
 		// int b = 0;
 		// for(Vector2 bone : model.getBones())

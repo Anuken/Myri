@@ -15,7 +15,7 @@ public class ModelData{
 	public Vector2 position, origin;
 	public Array<ModelData> children;
 	public int vertices = 10;
-	public boolean side, rotate;
+	public boolean side;
 
 	public ModelData(){
 
@@ -33,7 +33,7 @@ public class ModelData{
 		SoftModel model = new SoftModel(texture, vertices);
 		model.setName(name);
 		model.side = side;
-		model.rotate = rotate;
+	//	model.rotate = rotate;
 		Vector2 v = position;
 		v.scl(0.1f);
 		model.getPosition().set(v);
@@ -53,7 +53,7 @@ public class ModelData{
 	}
 
 	public PartWidget asWidget(){
-		PartWidget widget = new PartWidget();
+		PartWidget widget = new PartWidget(side);
 		widget.namefield.setText(name);
 		widget.namefield.fire(new ChangeListener.ChangeEvent());
 		if(origin != null)

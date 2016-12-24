@@ -12,8 +12,8 @@ import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ShortArray;
 
-import io.anuke.ucore.Geometry;
 import io.anuke.ucore.graphics.ShapeUtils;
+import io.anuke.ucore.util.Geometry;
 
 public class TerrainPolygon implements Iterable<Vector2>{
 	static Vector2 vector = new Vector2();

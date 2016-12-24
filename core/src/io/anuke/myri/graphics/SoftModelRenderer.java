@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import io.anuke.ucore.Geometry;
+import io.anuke.ucore.util.Geometry;
 
 public class SoftModelRenderer{
 	public boolean debug = true;

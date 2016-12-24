@@ -58,7 +58,7 @@ public class ModelEditor extends Module<Myri>{
 		VisTextButton newbutton = new VisTextButton("New Part");
 		newbutton.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
-				PartWidget widget = new PartWidget();
+				PartWidget widget = new PartWidget(false);
 				widget.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 				if(part == null) part = widget;
 				stage.addActor(widget);
