@@ -12,9 +12,10 @@ import com.badlogic.gdx.math.Vector3;
 import io.anuke.ucore.util.Geometry;
 
 public class SoftModelRenderer{
-	public boolean debug = true;
+	public boolean debug = true, round = true;
 	private PolygonSpriteBatch polybatch = new PolygonSpriteBatch();
 	private ShapeRenderer shape = new ShapeRenderer();
+	private Vector2 vector = new Vector2();
 
 	public SoftModelRenderer(){
 		shape.setAutoShapeType(true);
@@ -35,6 +36,7 @@ public class SoftModelRenderer{
 	private void renderDebug(SoftModel model, SoftModel parent){
 		float scale = model.getScale();
 		
+		Gdx.gl.glLineWidth(0.001f);
 		
 		if(parent != null){
 			shape.getTransformMatrix().setToTranslation(model.getTransformedPosition().x * scale + parent.getPosition().x, model.getTransformedPosition().y * scale + parent.getPosition().y, 0);
@@ -51,7 +53,6 @@ public class SoftModelRenderer{
 
 		//draw vertices
 		Geometry.iteratePolySegments(model.getVertices(), (x,y,x2,y2)->{
-			Gdx.gl.glLineWidth(0.1f);
 			
 			if(!model.side){
 				shape.line(x, y, x2, y2);
@@ -104,23 +105,37 @@ public class SoftModelRenderer{
 		
 		polybatch.end();
 		if(parent != null){
-			polybatch.getTransformMatrix()
-			.setToTranslation((model.getTransformedPosition().x) * scale + parent.getPosition().x + model.getOrigin().x*scale, 
-					(model.getTransformedPosition().y) * scale  + parent.getPosition().y + model.getOrigin().y*scale, 0);
+			float tx = (model.getTransformedPosition().x) * scale + parent.getPosition().x + model.getOrigin().x*scale;
+			float ty = (model.getTransformedPosition().y) * scale  + parent.getPosition().y + model.getOrigin().y*scale;
+			
+			if(round){
+				tx = (int)tx;
+				ty = (int)ty;
+			}
+			
+			polybatch.getTransformMatrix().setToTranslation(tx, ty, 0);
 		}else{
 			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale*1, 0);
 		}
 		
 		polybatch.getTransformMatrix().scale(scale, scale, 1f);
-		polybatch.getTransformMatrix().rotate(new Vector3(0,0,1), model.rotation );
+		polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation );
 		
 		polybatch.begin();
-		Vector2 offset = Vector2.Zero;
-		if(parent != null) offset = model.getOrigin();
+		
+		Vector2 offset = vector.set(0, 0);;
+		if(parent != null) offset.set(model.getOrigin());
+		
 		if(model.side){
-			polybatch.draw(model.getRegion(), -offset.x, -offset.y + 0.06f*scale, 0,0,model.getTexture().getWidth(), model.getTexture().getHeight(),1,1, -90);
+			offset.y -= 0.06f*scale;
+		}
+		
+		if(model.side){
+			polybatch.draw(model.getRegion(), -offset.x, -offset.y, 
+					0,0,model.getTexture().getWidth(), model.getTexture().getHeight(),1,1, -90);
 		}else{
-			polybatch.draw(model.getRegion(), -offset.x, -offset.y, model.getTexture().getWidth(), model.getTexture().getHeight());
+			polybatch.draw(model.getRegion(), -offset.x, -offset.y, 
+					model.getTexture().getWidth(), model.getTexture().getHeight());
 		}
 		
 		for(SoftModel child : model.getChildren()){

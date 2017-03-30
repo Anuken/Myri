@@ -21,7 +21,7 @@ public class PartTexture extends Actor{
 	private PartWidget part;
 	
 	public PartTexture(PartWidget part, String name){
-		setTexture(name);
+		//setTexture(name);
 		this.part = part;
 		addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button){
@@ -29,6 +29,7 @@ public class PartTexture extends Actor{
 					part.origin.set(x - getWidth()/2,y - getHeight()/2);
 					return true;
 				}
+				
 				lx = x;
 				ly = y;
 				part.toFront();
@@ -62,7 +63,6 @@ public class PartTexture extends Actor{
 	}
 	
 	public void draw(Batch batch, float alpha){
-		
 		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 		batch.setColor(Color.CORAL);
 		if(outline){

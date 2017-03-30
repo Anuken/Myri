@@ -33,7 +33,6 @@ public class ModelData{
 		SoftModel model = new SoftModel(texture, vertices);
 		model.setName(name);
 		model.side = side;
-	//	model.rotate = rotate;
 		Vector2 v = position;
 		v.scl(0.1f);
 		model.getPosition().set(v);

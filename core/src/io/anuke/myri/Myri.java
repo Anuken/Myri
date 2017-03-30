@@ -1,14 +1,10 @@
 package io.anuke.myri;
 
-import io.anuke.myri.modules.Input;
-import io.anuke.myri.modules.LevelEditor;
-import io.anuke.myri.modules.ModelEditor;
-import io.anuke.myri.modules.PreviewRenderer;
-import io.anuke.myri.modules.WorldRenderer;
+import io.anuke.myri.modules.*;
 import io.anuke.ucore.modules.ModuleController;
 
 public class Myri extends ModuleController<Myri>{
-	int type = 2;
+	int type = 0;
 
 	@Override
 	public void init(){

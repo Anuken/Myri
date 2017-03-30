@@ -14,7 +14,7 @@ public class WalkAnimation extends ModelAnimation{
 
 		//int b = 0;
 		//for(Vector2 bone : leg.getBones()){
-		//	bone.y = (float) Math.sin((b++) / 10f + time / 40f) * b/5f;
+			//bone.y = (float) Math.sin((b++) / 10f + time / 40f*(b/10f)) * b/5f;
 		//}
 
 		leg.updateBones();

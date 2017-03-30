@@ -15,6 +15,7 @@ import io.anuke.myri.animation.WalkAnimation;
 import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.Resources;
+import io.anuke.myri.shaders.PixelateEffect;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;
@@ -26,6 +27,7 @@ public class PreviewRenderer extends Module<Myri>{
 	public PostProcessor processor;
 	public GifRecorder recorder = new GifRecorder(batch);
 	public boolean editMode = true;
+	PixelateEffect effect;
 	WalkAnimation walk = new WalkAnimation();
 
 	public void init(){
@@ -35,8 +37,10 @@ public class PreviewRenderer extends Module<Myri>{
 				TextureFilter.Nearest);
 		processor.getCombinedBuffer().buffer2.getColorBufferTexture().setFilter(TextureFilter.Nearest,
 				TextureFilter.Nearest);
-		// PixelateEffect effect = new PixelateEffect();
-		// processor.addEffect(effect);
+		
+		effect = new PixelateEffect();
+		//processor.addEffect(effect);
+		
 		if(!editMode){
 			try{
 				model = Resources.loadModel(Gdx.files.local("model1.json"));
@@ -85,7 +89,10 @@ public class PreviewRenderer extends Module<Myri>{
 
 	@Override
 	public void resize(int width, int height){
+		
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+		renderer.setProjectionMatrix(batch.getProjectionMatrix());
+		effect.rebind();
 		//renderer.resize(width, height);
 	}
 }

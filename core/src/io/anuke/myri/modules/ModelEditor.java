@@ -42,7 +42,6 @@ public class ModelEditor extends Module<Myri>{
 		plex.addProcessor(this);
 		plex.addProcessor(stage);
 		Gdx.input.setInputProcessor(plex);
-		
 	}
 
 	public void setup(){
