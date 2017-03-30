@@ -55,6 +55,7 @@ public class ModelData{
 		PartWidget widget = new PartWidget(side);
 		widget.namefield.setText(name);
 		widget.namefield.fire(new ChangeListener.ChangeEvent());
+		//widget.rotation = side;
 		if(origin != null)
 		widget.origin.set(origin);
 		widget.setPosition(Gdx.graphics.getWidth() / 2 + position.x - widget.texture.texture.getWidth()*5, Gdx.graphics.getHeight() / 2 + position.y - widget.texture.texture.getHeight()*5);
