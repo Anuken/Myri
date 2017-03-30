@@ -8,7 +8,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/uCore"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/libgdx-contribs-postprocessing"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/uCore-Tools"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GDXGifRecorder"/>
+	<classpathentry kind="lib" path="/home/anuke/.gradle/caches/modules-2/files-2.1/com.github.anuken/gdx-postprocessing/8173fd4bb6/4e3fc27b6b2287bc108b15ac58336da4e3fd74f/gdx-postprocessing-8173fd4bb6.jar" sourcepath="/home/anuke/.gradle/caches/modules-2/files-2.1/com.github.anuken/gdx-postprocessing/8173fd4bb6/d86d8440d836691a5c4bf6f4722b6d96283bf359/gdx-postprocessing-8173fd4bb6-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

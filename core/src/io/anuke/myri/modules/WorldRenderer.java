@@ -16,6 +16,7 @@ import io.anuke.myri.io.Resources;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.RendererModule;
+import io.anuke.ucore.util.Timers;
 
 public class WorldRenderer extends RendererModule<Myri>{
 	Box2DDebugRenderer debug = new Box2DDebugRenderer();
@@ -136,6 +137,8 @@ public class WorldRenderer extends RendererModule<Myri>{
 	}
 
 	public void update(){
+		Timers.update(Gdx.graphics.getDeltaTime());
+		
 		camera.position.set(0, 0, 0);
 		camera.update();
 
@@ -146,7 +149,8 @@ public class WorldRenderer extends RendererModule<Myri>{
 		
 		for(int i = 0; i < model.getBones().length; i++){
 			model.getBones()[i].y = (i - model.getBones().length/2)*t;
-			//model.getBones()[i].x = i*model.getBoneSpacing() - model.getWidth()/2;
+			//model.getBones()[i].x = i;
+			model.getBones()[i].x = i*(float)Math.sqrt(model.getBoneSpacing()*model.getBoneSpacing()-t*t) - model.getWidth()/2;
 		}
 		
 		animation.update(model);

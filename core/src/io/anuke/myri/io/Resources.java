@@ -17,6 +17,7 @@ public class Resources{
 		return json;
 	}
 	
+	//TODO make this less painful to look at
 	public static SoftModel loadModel(FileHandle file){
 		SoftModel model = json().fromJson(ModelData.class, file).asModel();
 		Array<SoftModel> additions = new Array<SoftModel>();

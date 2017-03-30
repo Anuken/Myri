@@ -12,11 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.utils.Array;
 
+import io.anuke.gif.GifRecorder;
 import io.anuke.myri.terrain.TerrainPolygon;
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.util.Geometry;
-import io.anuke.utils.io.GifRecorder;
 
 public class TerrainCanvas extends Widget{
 	private PolygonSpriteBatch polybatch;

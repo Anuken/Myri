@@ -190,7 +190,7 @@ public class SoftModel{
 			}
 
 			sub.rotate(child.getPosition().y < 0 ? -90 : 90);
-			sub.add(rorig.x, bone2.y);
+			sub.add(rorig.x + (bone2.x-defaultX(i == 0 ? i + 0.5f : i - 0.5f)), bone2.y);
 			sub.sub(child.origin);
 		}
 	}
@@ -203,6 +203,10 @@ public class SoftModel{
 			bones[i].y = 0;
 		}
 		setVerticeUVs();
+	}
+	
+	private float defaultX(float i){
+		return (((float)i / (vw)) * texture.getWidth()) - (texture.getWidth()) / 2f;
 	}
 
 	private float[] defaultVertices(){

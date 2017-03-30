@@ -9,6 +9,7 @@ import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 import com.kotcrab.vis.ui.VisUI;
 
+import io.anuke.gif.GifRecorder;
 import io.anuke.myri.Myri;
 import io.anuke.myri.animation.WalkAnimation;
 import io.anuke.myri.graphics.SoftModel;
@@ -23,7 +24,7 @@ public class PreviewRenderer extends Module<Myri>{
 	public SpriteBatch batch = new SpriteBatch();
 	public SoftModelRenderer renderer = new SoftModelRenderer();
 	public PostProcessor processor;
-	// public GifRecorder recorder = new GifRecorder(batch);
+	public GifRecorder recorder = new GifRecorder(batch);
 	public boolean editMode = true;
 	WalkAnimation walk = new WalkAnimation();
 
@@ -74,8 +75,9 @@ public class PreviewRenderer extends Module<Myri>{
 		batch.begin();
 		batch.draw(VisUI.getSkin().getRegion("white"), Gdx.graphics.getWidth() / 2 - 2,
 				Gdx.graphics.getHeight() / 2 - 2, 4, 4);
-		// if(!editMode)recorder.update(VisUI.getSkin().getRegion("white"),
-		// Gdx.graphics.getDeltaTime());
+		
+		if(!editMode) recorder.update();
+		 
 		batch.end();
 
 		processor.render();

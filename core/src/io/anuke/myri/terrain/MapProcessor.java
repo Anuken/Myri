@@ -56,8 +56,8 @@ public class MapProcessor{
 						
 					}
 					pixmap.drawPixel(x, y, out);
-					if(layer == 1) pixmap.drawPixel(x, y, Color.rgba8888(0, 0, 0, 0.3f-Math.abs(Noise.normalNoise(x, y/2, 8f, 0.3f))));
-					if(layer == 0) pixmap.drawPixel(x, y, Color.rgba8888(0, 0, 0, 0.1f*(int)(Math.abs(Noise.normalNoise(x, y, 45f, 0.5f) + Noise.normalNoise(x, y, 5f, 0.4f))/0.1f)));
+					if(layer == 1) pixmap.drawPixel(x, y, Color.rgba8888(0, 0, 0, 0.3f-Math.abs(Noise.snoise(x, y/2, 8f, 0.3f))));
+					if(layer == 0) pixmap.drawPixel(x, y, Color.rgba8888(0, 0, 0, 0.1f*(int)(Math.abs(Noise.snoise(x, y, 45f, 0.5f) + Noise.snoise(x, y, 5f, 0.4f))/0.1f)));
 					
 				}
 
