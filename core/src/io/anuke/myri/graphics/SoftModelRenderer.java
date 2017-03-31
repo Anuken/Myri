@@ -57,7 +57,7 @@ public class SoftModelRenderer{
 			if(!model.side){
 				shape.line(x, y, x2, y2);
 			}else{
-				shape.line(y, x, y2, x2);
+				shape.line(y, -x, y2, -x2);
 			}
 		});
 		
@@ -83,7 +83,7 @@ public class SoftModelRenderer{
 			if(!model.side){
 				shape.circle(x, y, 5 / 10f);
 			}else{
-				shape.circle(y, x, 5 / 10f);
+				shape.circle(y, -x, 5 / 10f);
 			}
 		}
 
@@ -141,6 +141,12 @@ public class SoftModelRenderer{
 		for(SoftModel child : model.getChildren()){
 			renderModel(child, model);
 		}
+	}
+	
+	public void setSize(int width, int height){
+		polybatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+		shape.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+		shape.updateMatrices();
 	}
 	
 	public void setProjectionMatrix(Matrix4 matrix){

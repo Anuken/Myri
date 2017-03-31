@@ -137,7 +137,7 @@ public class SoftModel{
 		//super fancy resetting
 		upper.set(lower.set(diff.set(0,0)));
 
-		for(int i = 0;i <= vw;i ++){
+		for(int i = 0; i <= vw; i ++){
 			Vector2 bone = bones[i];
 			Vector2 last = null;
 
@@ -153,8 +153,10 @@ public class SoftModel{
 
 			diff.setLength(yw / 2);
 			diff.rotate(90);
+			
 			upper.set(bone).add(diff);
 			diff.rotate( -180);
+			
 			lower.set(bone).add(diff);
 
 			vertices[i * 2] = lower.x;

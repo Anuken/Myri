@@ -14,7 +14,7 @@ public class ModelData{
 	public String name;
 	public Vector2 position, origin;
 	public Array<ModelData> children;
-	public int vertices = 10;
+	public int vertices = 5;
 	public boolean side;
 
 	public ModelData(){

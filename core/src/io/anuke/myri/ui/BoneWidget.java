@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import io.anuke.ucore.graphics.ShapeUtils;
 
 public class BoneWidget extends Actor{
-	public Vector2[] bones = new Vector2[6];
+	public Vector2[] bones = new Vector2[5];
 	PartTexture texture;
 	
 	public BoneWidget(PartTexture texture){

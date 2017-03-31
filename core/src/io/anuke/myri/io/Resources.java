@@ -18,7 +18,7 @@ public class Resources{
 	}
 	
 	//TODO make this less painful to look at
-	public static SoftModel loadModel(FileHandle file){
+	public static SoftModel loadModel(FileHandle file, boolean dispose){
 		SoftModel model = json().fromJson(ModelData.class, file).asModel();
 		Array<SoftModel> additions = new Array<SoftModel>();
 		Array<SoftModel> removals = new Array<SoftModel>();
@@ -30,6 +30,7 @@ public class Resources{
 			tex.getTextureData().prepare();
 			Pixmap pixmap = tex.getTextureData().consumePixmap();
 			Pixmap rotated = PixmapUtils.rotate(pixmap, 90);
+			if(dispose)
 			tex.dispose();
 			pixmap.dispose();
 
@@ -47,4 +48,10 @@ public class Resources{
 		model.getChildren().addAll(additions);
 		return model;
 	}
+	
+	public static SoftModel loadModel(FileHandle file){
+		return loadModel(file, true);
+	}
+	
+	
 }

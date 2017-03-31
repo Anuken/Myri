@@ -19,7 +19,8 @@ public class PartTexture extends Actor{
 	public boolean outline = true;
 	public Vector2[] bones = new Vector2[6];
 	public boolean editing = true;
-
+	
+	private String texname;
 	private int range = 10;
 	private int selected = -1;
 	private float scale = 10;
@@ -27,7 +28,6 @@ public class PartTexture extends Actor{
 	private PartWidget part;
 
 	public PartTexture(PartWidget part, String name) {
-		//setTexture(name);
 		this.part = part;
 		addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
@@ -76,6 +76,7 @@ public class PartTexture extends Actor{
 						bones[selected].add(x-lx, y-ly);
 						lx = x;
 						ly = y;
+						ModelEditor.i.updateBones(part.rotation, getWidth(), getHeight(), bones, texname);
 					}
 				}else{
 					if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
@@ -92,6 +93,7 @@ public class PartTexture extends Actor{
 	}
 
 	public void setTexture(String name){
+		texname = name;
 		texture = Textures.get(name);
 		setSize(texture.getWidth() * scale, texture.getHeight() * scale);
 		
