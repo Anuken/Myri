@@ -19,6 +19,8 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooser.Mode;
 
 import io.anuke.myri.Myri;
+import io.anuke.myri.animation.ModelAnimation;
+import io.anuke.myri.animation.WalkAnimation;
 import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.ModelData;
@@ -39,6 +41,7 @@ public class ModelEditor extends Module<Myri>{
 	boolean setup = false;
 	SoftModel model;
 	SoftModelRenderer renderer;
+	ModelAnimation anim = new WalkAnimation();
 
 	public ModelEditor(){
 		i=this;
@@ -129,7 +132,7 @@ public class ModelEditor extends Module<Myri>{
 			part = w;
 			
 			model = Resources.loadModel(Gdx.files.local("model1.json"), false);
-			model.setPosition(Gdx.graphics.getWidth()/6, 30);
+			model.setPosition(Gdx.graphics.getWidth()/6, 50);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -140,7 +143,6 @@ public class ModelEditor extends Module<Myri>{
 		SoftModel child = name.equals("body") ? model : model.getChild(name);
 		
 		Vector2[] out = child.getBones();
-		log(out.length);
 		for(int i = 0; i < out.length; i ++){
 			Vector2 bone = bones[i];
 			if(!flip){
@@ -148,7 +150,7 @@ public class ModelEditor extends Module<Myri>{
 				out[i].y = bone.y/h*model.getHeight();
 			}else{
 				out[out.length-1-i].y = (bone.x)/(h)*child.getWidth();
-				//out[i].x = bone.y/h*model.getHeight();
+				out[out.length-1-i].x = -bone.y/w*child.getHeight();
 			}
 		}
 		
@@ -159,14 +161,18 @@ public class ModelEditor extends Module<Myri>{
 	public void update(){
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) Gdx.app.exit();
 		if(Gdx.graphics.getFrameId() == 2 && !setup) setup();
+		if(Gdx.input.isKeyJustPressed(Keys.D)) renderer.debug = !renderer.debug;
 		
 		UCore.clearScreen(Color.BLACK);
 		stage.draw();
 		
 		stage.act(Gdx.graphics.getDeltaTime());
 		
-		if(model != null)
-		renderer.render(model);
+		if(model != null){
+			anim.update(model);
+			
+			renderer.render(model);
+		}
 	}
 
 	@Override

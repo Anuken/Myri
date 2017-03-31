@@ -1,5 +1,7 @@
 package io.anuke.myri.graphics;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -106,6 +108,12 @@ public class SoftModel{
 		
 		return null;
 	}
+	
+	public void forEachChild(Consumer<SoftModel> cons){
+		for(SoftModel model : children){
+			cons.accept(model);
+		}
+	}
 
 	public float getWidth(){
 		return texture.getWidth();
@@ -136,7 +144,8 @@ public class SoftModel{
 		float[] vertices = region.getVertices();
 		//super fancy resetting
 		upper.set(lower.set(diff.set(0,0)));
-
+		
+		
 		for(int i = 0; i <= vw; i ++){
 			Vector2 bone = bones[i];
 			Vector2 last = null;
@@ -164,6 +173,24 @@ public class SoftModel{
 			vertices[vw * 4 - i * 2 + 2] = upper.x;
 			vertices[vw * 4 - i * 2 + 1 + 2] = upper.y;
 		}
+		
+		/*
+		for(int i = 0; i <= vw; i ++){
+			Vector2 bone = bones[i];
+
+			lower.set(vertices[i * 2], vertices[i * 2 + 1]);
+			upper.set(vertices[vw * 4 - i * 2 + 2], vertices[vw * 4 - i * 2 + 1 + 2]);
+			
+			upper.set(bone).add(0, yw/2);
+			
+			lower.set(bone).add(0, -yw/2);
+
+			vertices[i * 2] = lower.x;
+			vertices[i * 2 + 1] = lower.y;
+			vertices[vw * 4 - i * 2 + 2] = upper.x;
+			vertices[vw * 4 - i * 2 + 1 + 2] = upper.y;
+		}
+		*/
 
 		for(SoftModel child : children){
 			Vector2 rorig = child.getPosition().cpy().add(child.getOrigin()); //relative origin
@@ -192,7 +219,7 @@ public class SoftModel{
 			}
 
 			sub.rotate(child.getPosition().y < 0 ? -90 : 90);
-			sub.add(rorig.x + (bone2.x-defaultX(i == 0 ? i + 0.5f : i - 0.5f)), bone2.y);
+			sub.add(rorig.x + (bone1.x-defaultX(i == 0 ? i : i - 1f)), bone2.y);
 			sub.sub(child.origin);
 		}
 	}
@@ -207,7 +234,7 @@ public class SoftModel{
 		setVerticeUVs();
 	}
 	
-	private float defaultX(float i){
+	public float defaultX(float i){
 		return (((float)i / (vw)) * texture.getWidth()) - (texture.getWidth()) / 2f;
 	}
 

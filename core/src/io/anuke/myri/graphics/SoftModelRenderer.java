@@ -68,7 +68,7 @@ public class SoftModelRenderer{
 			if(!model.side){
 				shape.line(model.getBones()[i], model.getBones()[i + 1]);
 			}else{
-				shape.line(model.getBones()[i].y, model.getBones()[i].x, model.getBones()[i+1].y, model.getBones()[i+1].x);
+				shape.line(model.getBones()[i].y, -model.getBones()[i].x, model.getBones()[i+1].y, -model.getBones()[i+1].x);
 			}
 		}
 
@@ -92,7 +92,7 @@ public class SoftModelRenderer{
 
 		for(int i = 0;i < model.getBones().length;i ++){
 			
-			shape.circle(!model.side ? model.getBones()[i].x : model.getBones()[i].y, !model.side ? model.getBones()[i].y : model.getBones()[i].x, 6 / 10f);
+			shape.circle(!model.side ? model.getBones()[i].x : model.getBones()[i].y, !model.side ? model.getBones()[i].y : -model.getBones()[i].x, 6 / 10f);
 		}
 		
 		for(SoftModel child : model.getChildren()){
