@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +19,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooser.Mode;
 
+import io.anuke.gif.GifRecorder;
 import io.anuke.myri.Myri;
 import io.anuke.myri.animation.ModelAnimation;
 import io.anuke.myri.animation.WalkAnimation;
@@ -42,6 +44,7 @@ public class ModelEditor extends Module<Myri>{
 	SoftModel model;
 	SoftModelRenderer renderer;
 	ModelAnimation anim = new WalkAnimation();
+	GifRecorder recorder;
 
 	public ModelEditor(){
 		i=this;
@@ -52,6 +55,7 @@ public class ModelEditor extends Module<Myri>{
 		VisUI.load(SkinScale.X2);
 		ShapeUtils.region = VisUI.getSkin().getRegion("white");
 		stage.setViewport(new ScreenViewport());
+		recorder = new GifRecorder((SpriteBatch)stage.getBatch());
 		InputMultiplexer plex = new InputMultiplexer();
 		plex.addProcessor(this);
 		plex.addProcessor(stage);
@@ -173,6 +177,10 @@ public class ModelEditor extends Module<Myri>{
 			
 			renderer.render(model);
 		}
+		
+		stage.getBatch().begin();
+		recorder.update();
+		stage.getBatch().end();
 	}
 
 	@Override

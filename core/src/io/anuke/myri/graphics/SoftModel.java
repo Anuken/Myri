@@ -15,7 +15,7 @@ public class SoftModel{
 	private final static EarClippingTriangulator triangulator = new EarClippingTriangulator();
 	private final static Vector2 upper = new Vector2(), lower = new Vector2(), diff = new Vector2();
 	private String name;
-	private Vector2 position = new Vector2(), origin = new Vector2(), transformedPosition = new Vector2();
+	private Vector2 position = new Vector2(), origin = new Vector2(), transformedPosition = new Vector2(), offset = new Vector2();
 	private Texture texture;
 	private TextureRegion tregion;
 	private float scale = 2f;
@@ -26,6 +26,7 @@ public class SoftModel{
 	public float rotation;
 	public boolean side; //side vertices/bones
 	public boolean rotate;
+	public boolean underparent;
 
 	public SoftModel(Texture texture, int vw){
 		this.texture = texture;
@@ -71,6 +72,10 @@ public class SoftModel{
 
 	public Vector2 getPosition(){
 		return position;
+	}
+	
+	public Vector2 getOffset(){
+		return offset;
 	}
 	
 	public void setPosition(float x, float y){
@@ -137,6 +142,13 @@ public class SoftModel{
 
 	public float[] getVertices(){
 		return region.getVertices();
+	}
+	
+	public void updateBonesRecursive(){
+		updateBones();
+		for(SoftModel m : children){
+			m.updateBonesRecursive();
+		}
 	}
 
 	public void updateBones(){

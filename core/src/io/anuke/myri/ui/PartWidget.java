@@ -14,7 +14,7 @@ public class PartWidget extends VisTable{
 	public PartTexture texture;
 	public VisTextField namefield;
 	public Vector2 origin = new Vector2();
-	public boolean rotation;
+	public boolean rotation, underparent;
 	 
 	public PartWidget(boolean rotate){
 		bottom().left();
@@ -43,6 +43,12 @@ public class PartWidget extends VisTable{
 				texture.editing = lock.isChecked();
 			}
 		});
+		VisCheckBox under = new VisCheckBox("under", false);
+		under.addListener(new ChangeListener(){
+			public void changed(ChangeEvent event, Actor actor){
+				underparent = under.isChecked();
+			}
+		});
 		VisImageButton up = new VisImageButton(VisUI.getSkin().getDrawable("icon-arrow-right"));
 		up.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
@@ -63,6 +69,7 @@ public class PartWidget extends VisTable{
 		add(rotated).growX().colspan(2);
 		add(lock).growX();
 		row();
+		add(under).colspan(2).growX().row();;
 		
 		add(texture).align(Align.bottomLeft).colspan(3);
 		

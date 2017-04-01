@@ -15,7 +15,7 @@ public class ModelData{
 	public Vector2 position, origin;
 	public Array<ModelData> children;
 	public int vertices = 5;
-	public boolean side;
+	public boolean side, under;
 
 	public ModelData(){
 
@@ -26,6 +26,7 @@ public class ModelData{
 		origin = p.origin;
 		side = p.rotation;
 		position = new Vector2(p.getX() + p.texture.texture.getWidth()*5 - Gdx.graphics.getWidth()/2, p.getY() + p.texture.texture.getHeight()*5 - Gdx.graphics.getHeight()/2);
+		under = p.underparent;
 	}
 
 	public SoftModel asModel(){
@@ -33,6 +34,7 @@ public class ModelData{
 		SoftModel model = new SoftModel(texture, vertices);
 		model.setName(name);
 		model.side = side;
+		model.underparent = under;
 		Vector2 v = position;
 		v.scl(0.1f);
 		model.getPosition().set(v);

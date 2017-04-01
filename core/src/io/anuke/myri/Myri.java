@@ -10,7 +10,6 @@ public class Myri extends ModuleController<Myri>{
 	public void init(){
 		if(type == 0){
 			addModule(ModelEditor.class);
-			//addModule(PreviewRenderer.class);
 		}else if(type == 1){
 			addModule(LevelEditor.class);
 		}else{

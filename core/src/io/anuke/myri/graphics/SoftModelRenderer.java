@@ -101,6 +101,8 @@ public class SoftModelRenderer{
 	}
 
 	private void renderModel(SoftModel model, SoftModel parent){
+
+		
 		float scale = model.getScale();
 		
 		polybatch.end();
@@ -123,6 +125,19 @@ public class SoftModelRenderer{
 		
 		polybatch.begin();
 		
+		for(SoftModel child : model.getChildren()){
+			if(child.underparent)
+			renderModel(child, model);
+		}
+		
+		if(parent == null){
+			polybatch.end();
+			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale*1, 0);
+			polybatch.getTransformMatrix().scale(scale, scale, 1f);
+			polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation );
+			polybatch.begin();
+		}
+		
 		Vector2 offset = vector.set(0, 0);;
 		if(parent != null) offset.set(model.getOrigin());
 		
@@ -139,6 +154,7 @@ public class SoftModelRenderer{
 		}
 		
 		for(SoftModel child : model.getChildren()){
+			if(!child.underparent)
 			renderModel(child, model);
 		}
 	}

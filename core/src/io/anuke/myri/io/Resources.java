@@ -40,6 +40,7 @@ public class Resources{
 			nmodel.getOrigin().set(child.getOrigin());
 			nmodel.getPosition().set(child.getPosition());
 			nmodel.updateTransformedPosition();
+			nmodel.underparent = child.underparent;
 			nmodel.rotate = child.rotate;
 			nmodel.side = child.side;
 			additions.add(nmodel);

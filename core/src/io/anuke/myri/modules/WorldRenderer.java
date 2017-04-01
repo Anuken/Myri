@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 
+import io.anuke.gif.GifRecorder;
 import io.anuke.myri.Myri;
 import io.anuke.myri.animation.ModelAnimation;
 import io.anuke.myri.animation.WalkAnimation;
@@ -24,13 +25,14 @@ import io.anuke.ucore.util.Timers;
 
 public class WorldRenderer extends RendererModule<Myri>{
 	Box2DDebugRenderer debug = new Box2DDebugRenderer();
-	boolean pixel = false;
+	boolean pixel = true;
 	public OrthogonalTiledMapRenderer trenderer;
 	public TiledMap map;
 	public SoftModelRenderer srenderer = new SoftModelRenderer();
 	public World world = new World(new Vector2(0, -200), true);
 	public SoftModel model;
 	public PostProcessor processor;
+	GifRecorder recorder = new GifRecorder(batch);
 	PixelateEffect effect;
 	ModelAnimation animation = new WalkAnimation();
 	Body playerbody;
@@ -102,11 +104,15 @@ public class WorldRenderer extends RendererModule<Myri>{
 		player.render(srenderer);
 		
 		//if(srenderer.debug)
-		debug.render(world, camera.combined);
+		//debug.render(world, camera.combined);
 		
 		processor.render();
 
 		stepWorld(Gdx.graphics.getDeltaTime());
+		
+		batch.begin();
+		recorder.update();
+		batch.end();
 	}
 
 	private void stepWorld(float deltaTime){
@@ -162,7 +168,6 @@ public class WorldRenderer extends RendererModule<Myri>{
 		
 		processor.getCombinedBuffer().buffer1.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		processor.getCombinedBuffer().buffer2.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		
 	}
 
 }
