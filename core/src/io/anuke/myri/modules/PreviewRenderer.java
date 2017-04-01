@@ -16,7 +16,6 @@ import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.Resources;
 import io.anuke.myri.shaders.PixelateEffect;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;
 
@@ -59,7 +58,7 @@ public class PreviewRenderer extends Module<Myri>{
 			Gdx.app.exit();
 		processor.capture();
 
-		UCore.clearScreen(Color.BLACK);
+		clearScreen(Color.BLACK);
 
 		//walk.update(model);
 

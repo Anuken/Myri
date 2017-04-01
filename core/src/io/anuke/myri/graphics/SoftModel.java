@@ -119,6 +119,14 @@ public class SoftModel{
 			cons.accept(model);
 		}
 	}
+	
+	/**Only iterates on children with names containing the filter string.*/
+	public void forEachChild(String filter, Consumer<SoftModel> cons){
+		for(SoftModel model : children){
+			if(model.name.contains(filter))
+			cons.accept(model);
+		}
+	}
 
 	public float getWidth(){
 		return texture.getWidth();

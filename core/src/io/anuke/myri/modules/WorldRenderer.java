@@ -39,7 +39,6 @@ public class WorldRenderer extends RendererModule<Myri>{
 	Player player;
 	float accumulator;
 	
-
 	public WorldRenderer() {
 		ShaderLoader.BasePath = "shaders/";
 		

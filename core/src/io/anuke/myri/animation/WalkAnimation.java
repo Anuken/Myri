@@ -13,19 +13,15 @@ public class WalkAnimation extends ModelAnimation{
 	float tailwag = 1f;
 	float bodymove = 1f;
 	float legmove = 1f;
-	float legraise = 1.3f;
+	float legraise = 1.5f;
 
 	@Override
 	public void animate(SoftModel model){
-		// int b = 0;
-		// for(Vector2 bone : model.getBones())
-		// bone.y = (float)Math.sin((b++)/5f +time/30f)*8f;
 		i = 0;
 		
 		float t = time / 10f*speed;
 		
-		model.forEachChild((leg)->{
-			if(!leg.getName().contains("leg")) return;
+		model.forEachChild("leg", (leg)->{
 
 			float step = ((i == 2 || i == 1 )? 0 : 10) + i*3;
 			

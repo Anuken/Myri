@@ -18,7 +18,6 @@ public class PartTexture extends Actor{
 	public Texture texture;
 	public boolean outline = true;
 	public Vector2[] bones = new Vector2[6];
-	public boolean editing = true;
 	
 	private String texname;
 	private int range = 10;
@@ -32,7 +31,7 @@ public class PartTexture extends Actor{
 		
 		addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
-				if(editing){
+				if(part.edit){
 					for(int i = 0; i < bones.length; i++){
 						Vector2 v = bones[i];
 
@@ -53,11 +52,8 @@ public class PartTexture extends Actor{
 				lx = x;
 				ly = y;
 				part.toFront();
-				if(ModelEditor.i.selected != null && !ModelEditor.i.vbox.isChecked()){
-					ModelEditor.i.selected.setShown(false);
-				}
 
-				ModelEditor.i.selected = part;
+				ModelEditor.i.setSelected(part);
 				part.setShown(true);
 
 				return true;
@@ -66,18 +62,18 @@ public class PartTexture extends Actor{
 
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 
-				if(editing){
+				if(part.edit){
 					selected = -1;
 				}
 			}
 
 			public void touchDragged(InputEvent event, float x, float y, int pointer){
-				if(editing){
+				if(part.edit){
 					if(selected != -1){
 						bones[selected].add(x-lx, y-ly);
 						lx = x;
 						ly = y;
-						ModelEditor.i.updateBones(part.rotation, getWidth(), getHeight(), bones, texname);
+						ModelEditor.i.updateBones(part.rotated, getWidth(), getHeight(), bones, texname);
 					}
 				}else{
 					if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
@@ -100,7 +96,7 @@ public class PartTexture extends Actor{
 		texture = Textures.get(name);
 		setSize(texture.getWidth() * scale, texture.getHeight() * scale);
 		
-		if(!part.rotation){
+		if(!part.rotated){
 			for(int i = 0; i < bones.length; i++){
 				bones[i].set(-getWidth() / 2 + (float) i / (bones.length - 1) * getWidth(), 0);
 			}

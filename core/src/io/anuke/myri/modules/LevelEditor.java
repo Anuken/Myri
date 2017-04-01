@@ -19,7 +19,6 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 import io.anuke.myri.Myri;
 import io.anuke.myri.terrain.MapProcessor;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;
@@ -123,7 +122,7 @@ public class LevelEditor extends Module<Myri>{
 			changed = false;
 		}
 
-		UCore.clearScreen(Color.BLACK);
+		clearScreen(Color.BLACK);
 		stage.getBatch().begin();
 		stage.getBatch().draw(maptex, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.getBatch().end();

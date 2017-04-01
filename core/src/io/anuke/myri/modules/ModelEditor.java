@@ -8,16 +8,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.VisUI.SkinScale;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.kotcrab.vis.ui.widget.file.FileChooser.Mode;
+import com.kotcrab.vis.ui.widget.*;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.myri.Myri;
@@ -28,26 +26,30 @@ import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.ModelData;
 import io.anuke.myri.io.Resources;
 import io.anuke.myri.ui.PartWidget;
-import io.anuke.ucore.UCore;
+import io.anuke.scene.Layout;
+import io.anuke.scene.SceneModule;
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
-import io.anuke.ucore.modules.Module;
 
-public class ModelEditor extends Module<Myri>{
+public class ModelEditor extends SceneModule<Myri>{
 	public static ModelEditor i;
-	Stage stage = new Stage();
-	FileChooser chooser;
-	PartWidget part;
-	public PartWidget selected;
-	public VisCheckBox vbox;
 	boolean setup = false;
+	
+	Stage stage;
+	PartWidget selected;
+	
 	SoftModel model;
 	SoftModelRenderer renderer;
 	ModelAnimation anim = new WalkAnimation();
 	GifRecorder recorder;
+	
+	VisTextField namefield, parentfield;
+	VisCheckBox rotatebox, editbox, underbox;
+	Layout wlayout;
 
 	public ModelEditor(){
 		i=this;
+		stage = new Stage();
 		renderer = new SoftModelRenderer();
 		renderer.debug = true;
 		renderer.round = false;
@@ -65,9 +67,6 @@ public class ModelEditor extends Module<Myri>{
 	public void setup(){
 		setup = true;
 
-		FileChooser.setDefaultPrefsName("myri");
-		chooser = new FileChooser(Mode.OPEN);
-
 		VisTable table = new VisTable();
 		table.setFillParent(true);
 		stage.addActor(table);
@@ -75,41 +74,27 @@ public class ModelEditor extends Module<Myri>{
 		VisTextButton newbutton = new VisTextButton("New Part");
 		newbutton.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
-				PartWidget widget = new PartWidget(false);
+				PartWidget widget = new PartWidget();
 				widget.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-				if(part == null) part = widget;
+				if(selected == null) selected = widget;
 				stage.addActor(widget);
 			}
 		});
-
-		vbox = new VisCheckBox("Visible", true);
-		vbox.addListener(new ChangeListener(){
-			public void changed(ChangeEvent event, Actor a){
-				for(Actor actor : stage.getActors()){
-					if(actor instanceof PartWidget){
-						PartWidget p = (PartWidget)actor;
-						p.setShown(vbox.isChecked());
-					}
-				}
-			}
-		});
-		
-		vbox.setChecked(false);
 		
 		VisTextButton save = new VisTextButton("Save");
 		save.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actora){
-				if(part == null) return;
-				System.out.println("File written.");
+				if(selected == null) return;
+				
 				Array<ModelData> children = new Array<ModelData>();
-				ModelData main = new ModelData(part);
+				ModelData main = new ModelData(selected);
 				for(Actor actor : stage.getActors()){
 					if(!(actor instanceof PartWidget)) continue;
 				
 					PartWidget p = (PartWidget)actor;
 					ModelData data = null;
-					if(p != part){
+					if(p != selected){
 						data = new ModelData(p);
 						children.add(data);
 					}else{
@@ -119,13 +104,16 @@ public class ModelEditor extends Module<Myri>{
 				}
 				String string = Resources.json().toJson(main);
 				Gdx.files.local("model1.json").writeString(string, false);
+				log("File written.");
 			}
 
 		});
 
-		table.top().right().add(vbox);
+		table.top().right();
 		table.add(newbutton);
 		table.add(save);
+		
+		setupParts();
 
 		try{
 			ModelData data = Resources.json().fromJson(ModelData.class, Gdx.files.local("model1.json"));
@@ -133,7 +121,7 @@ public class ModelEditor extends Module<Myri>{
 			stage.addActor(w);
 			for(ModelData d : data.children)
 				stage.addActor(d.asWidget());
-			part = w;
+			selected = w;
 			
 			model = Resources.loadModel(Gdx.files.local("model1.json"), false);
 			model.setPosition(Gdx.graphics.getWidth()/6, 50);
@@ -141,6 +129,67 @@ public class ModelEditor extends Module<Myri>{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	void setupParts(){
+		Layout l = fill();
+		l.touch(Touchable.disabled);
+		
+		wlayout = l;
+		
+		namefield = l.field("legb", (text)->{
+			selected.name = text;
+		});
+		
+		parentfield = l.field("body", (text)->{
+			selected.parentname = text;
+		});
+		
+		rotatebox = l.check("Rotated", (b)->{
+			selected.rotated = b;
+		});
+		
+		editbox = l.check("Edit", (b)->{
+			selected.edit = b;
+		});
+		
+		underbox = l.check("Under", (b)->{
+			selected.under = b;
+		});
+		
+		VisImageButton down = l.ibutton("icon-arrow-right", ()->{
+			selected.toFront();
+		});
+		
+		VisImageButton up = l.ibutton("icon-arrow-left", ()->{
+			selected.toBack();
+		});
+		
+		l.top().left();
+		
+		l.$(namefield).fillY();
+		l.$(down);
+		l.$(up);
+		l.row();
+		l.$(parentfield).fillY();
+		l.$text(":Parent").colspan(2).row();
+		
+		l.$(editbox).colspan(3).align(Align.left);
+		l.row();
+		l.$(underbox).colspan(3).align(Align.left);
+		l.row();
+		l.$(rotatebox).colspan(3).align(Align.left);
+	}
+	
+	public void setSelected(PartWidget widget){
+		if(selected != null) selected.setShown(false);
+		selected = widget;
+		namefield.setText(widget.name);
+		parentfield.setText(widget.parentname);
+		editbox.setChecked(widget.edit);
+		rotatebox.setChecked(widget.rotated);
+		underbox.setChecked(widget.under);
+		wlayout.touch(Touchable.enabled);
 	}
 	
 	public void updateBones(boolean flip, float w, float h, Vector2[] bones, String name){
@@ -167,10 +216,8 @@ public class ModelEditor extends Module<Myri>{
 		if(Gdx.graphics.getFrameId() == 2 && !setup) setup();
 		if(Gdx.input.isKeyJustPressed(Keys.D)) renderer.debug = !renderer.debug;
 		
-		UCore.clearScreen(Color.BLACK);
-		stage.draw();
-		
-		stage.act(Gdx.graphics.getDeltaTime());
+		clearScreen(Color.BLACK);
+		act();
 		
 		if(model != null){
 			anim.update(model);
@@ -185,7 +232,7 @@ public class ModelEditor extends Module<Myri>{
 
 	@Override
 	public void resize(int width, int height){
-		stage.getViewport().update(width, height, true);
+		super.resize(width, height);
 		renderer.setSize(width/3, height/3);
 	}
 }
