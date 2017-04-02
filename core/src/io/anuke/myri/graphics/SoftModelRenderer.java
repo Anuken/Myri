@@ -101,8 +101,6 @@ public class SoftModelRenderer{
 	}
 
 	private void renderModel(SoftModel model, SoftModel parent){
-
-		
 		float scale = model.getScale();
 		
 		polybatch.end();
@@ -115,6 +113,7 @@ public class SoftModelRenderer{
 				ty = (int)ty;
 			}
 			
+			//polybatch.getTransformMatrix().translate(x, y, 0);
 			polybatch.getTransformMatrix().setToTranslation(tx, ty, 0);
 		}else{
 			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale*1, 0);

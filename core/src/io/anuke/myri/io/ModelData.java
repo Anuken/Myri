@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.myri.graphics.SoftModel;
-import io.anuke.myri.ui.PartWidget;
+import io.anuke.myri.ui.Part;
 import io.anuke.ucore.graphics.Textures;
 
 public class ModelData{
@@ -20,7 +20,7 @@ public class ModelData{
 
 	}
 	
-	public ModelData(PartWidget p){
+	public ModelData(Part p){
 		name = p.name;
 		origin = p.origin;
 		rotated = p.rotated;
@@ -52,8 +52,8 @@ public class ModelData{
 		return model;
 	}
 
-	public PartWidget asWidget(){
-		PartWidget widget = new PartWidget();
+	public Part asWidget(){
+		Part widget = new Part();
 		widget.rotated = rotated;
 		widget.under = under;
 		widget.name = name;
@@ -66,5 +66,9 @@ public class ModelData{
 		widget.moved(0, 0);
 		
 		return widget;
+	}
+	
+	public String toString(){
+		return "Data [" + name + "]";
 	}
 }

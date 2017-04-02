@@ -6,16 +6,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class PartWidget extends VisTable{
+public class Part extends VisTable{
 	public PartTexture texture;
 	public Vector2 origin = new Vector2();
-	public String name, parentname;
+	public String name = "body", parentname = "body";
 	public boolean rotated, under, edit;
 	 
-	public PartWidget(){
+	public Part(){
 		bottom().left();
 		
-		texture = new PartTexture(this, "body");
+		texture = new PartTexture(this, name);
 		
 		add(texture).align(Align.bottomLeft).colspan(3);
 		

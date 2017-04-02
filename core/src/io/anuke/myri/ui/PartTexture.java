@@ -24,9 +24,9 @@ public class PartTexture extends Actor{
 	private int selected = -1;
 	private float scale = 10;
 	private float lx, ly;
-	private PartWidget part;
+	private Part part;
 
-	public PartTexture(PartWidget part, String name) {
+	public PartTexture(Part part, String name) {
 		this.part = part;
 		
 		addListener(new InputListener(){
@@ -56,8 +56,7 @@ public class PartTexture extends Actor{
 				ModelEditor.i.setSelected(part);
 				part.setShown(true);
 
-				return true;
-				
+				return false;
 			}
 
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
