@@ -1,6 +1,7 @@
 package io.anuke.myri.modules;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -20,13 +21,14 @@ import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.Resources;
 import io.anuke.myri.shaders.PixelateEffect;
+import io.anuke.ucore.graphics.FrameBufferMap;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.util.Timers;
 
 public class WorldRenderer extends RendererModule<Myri>{
 	Box2DDebugRenderer debug = new Box2DDebugRenderer();
-	boolean pixel = true;
+	boolean pixel = false;
 	public OrthogonalTiledMapRenderer trenderer;
 	public TiledMap map;
 	public SoftModelRenderer srenderer = new SoftModelRenderer();
@@ -40,6 +42,7 @@ public class WorldRenderer extends RendererModule<Myri>{
 	Player player;
 	float accumulator;
 	SoftModel test;
+	FrameBufferMap buffers = new FrameBufferMap();
 	
 	public WorldRenderer() {
 		ShaderLoader.BasePath = "shaders/";
@@ -53,6 +56,8 @@ public class WorldRenderer extends RendererModule<Myri>{
 		srenderer.round = pixel;
 
 		model = Resources.loadModel(Gdx.files.local("model1.json"));
+		
+		buffers.add("pixel", 1440/4, 849/4);
 
 		setupPlayer();
 
@@ -108,8 +113,14 @@ public class WorldRenderer extends RendererModule<Myri>{
 
 		srenderer.setProjectionMatrix(camera.combined);
 		
+		buffers.begin("pixel");
+		clearScreen(Color.CLEAR);
 		player.render(srenderer);
+		buffers.end("pixel");
 		
+		batch.begin();
+		batch.draw(buffers.texture("pixel"), 0, Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), -Gdx.graphics.getHeight());
+		batch.end();
 		//srenderer.render(test);
 		
 		//if(srenderer.debug)
@@ -165,6 +176,7 @@ public class WorldRenderer extends RendererModule<Myri>{
 	
 	public void resize(int width, int height){
 		super.resize(width, height);
+		batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 		if(processor != null){
 			processor.dispose();
 			effect.dispose();

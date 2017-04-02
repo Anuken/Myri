@@ -303,4 +303,9 @@ public class SoftModel{
 		}
 
 	}
+	
+	@Override
+	public String toString(){
+		return "SoftModel: " + name;
+	}
 }

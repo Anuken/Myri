@@ -102,51 +102,45 @@ public class SoftModelRenderer{
 
 	private void renderModel(SoftModel model, boolean root, float offsetx, float offsety){
 		float scale = model.getScale();
-		
+
 		float addx = offsetx+model.getTransformedPosition().x - model.getOrigin().x*scale, 
 				addy = offsety+model.getTransformedPosition().y - model.getOrigin().y*scale-scale;
 		
+		float raddx = 0, raddy = 0;
+		
 		if(!root){
-			//so
-			//adding origin HERE
-			//then removing it in offset down there
-			//actually fixes the rounding error????
-			addx = (model.getTransformedPosition().x) * scale + offsetx + model.getOrigin().x*scale;
-			addy = (model.getTransformedPosition().y) * scale  + offsety + model.getOrigin().y*scale;
+			addx = (model.getTransformedPosition().x) * scale + offsetx;
+			addy = (model.getTransformedPosition().y) * scale  + offsety;
 			
 			if(round){
-				addx = (int)addx;
-				addy = (int)addy;
+				raddx = (int)(addx + model.getOrigin().x) - model.getOrigin().x;
+				raddy = (int)(addy + model.getOrigin().y) - model.getOrigin().y;
+			}else{
+				raddx = addx;
+				raddy = addy;
 			}
-			
-			//addx -= model.getOrigin().x;
-			//addy -= model.getOrigin().y;
 		}else{
 			addx = model.getTransformedPosition().x;
 			addy = model.getTransformedPosition().y;
+			raddx = addx;
+			raddy = addy;
 		}
 		
 		for(SoftModel child : model.getChildren()){
 			if(child.underparent)
 			renderModel(child, false, addx, addy);
 		}
-
 		
-		polybatch.getTransformMatrix().setToTranslation(addx, addy, 0);
+		polybatch.getTransformMatrix().setToTranslation(raddx, raddy, 0);
 		polybatch.getTransformMatrix().scale(scale, scale, 1f);
 		polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation);
-
 		
 		polybatch.begin();
 		
 		Vector2 offset = vector.set(0, 0);
 		
-		//what the hell? shouldn't these cancel out? why does this even exist?
-		//why was this added in the first place?
-		if(!root) offset.set(model.getOrigin());
-		
 		if(model.side){
-			offset.y -= 0.06f*scale;
+		//	offset.y -= 0.06f*scale;
 		}
 		
 		if(root)
