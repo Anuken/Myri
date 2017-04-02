@@ -267,7 +267,8 @@ public class ModelEditor extends SceneModule<Myri>{
 		act();
 
 		if(model != null){
-			anim.update(model);
+		//	anim.update(model);
+			model.updateBonesRecursive();
 
 			renderer.render(model);
 		}

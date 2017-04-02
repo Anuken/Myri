@@ -16,15 +16,15 @@ public class SoftModelRenderer{
 	private PolygonSpriteBatch polybatch = new PolygonSpriteBatch();
 	private ShapeRenderer shape = new ShapeRenderer();
 	private Vector2 vector = new Vector2();
+	private Vector3 tmp = new Vector3();
 
 	public SoftModelRenderer(){
 		shape.setAutoShapeType(true);
 	}
 
 	public void render(SoftModel model){
-		polybatch.begin();
-		renderModel(model, null);
-		polybatch.end();
+	
+		renderModel(model, true, 0, 0);
 		
 		if(debug){
 			shape.begin(ShapeType.Line);
@@ -100,49 +100,57 @@ public class SoftModelRenderer{
 		}
 	}
 
-	private void renderModel(SoftModel model, SoftModel parent){
+	private void renderModel(SoftModel model, boolean root, float offsetx, float offsety){
 		float scale = model.getScale();
 		
-		polybatch.end();
-		if(parent != null){
-			float tx = (model.getTransformedPosition().x) * scale + parent.getPosition().x + model.getOrigin().x*scale;
-			float ty = (model.getTransformedPosition().y) * scale  + parent.getPosition().y + model.getOrigin().y*scale;
+		float addx = offsetx+model.getTransformedPosition().x - model.getOrigin().x*scale, 
+				addy = offsety+model.getTransformedPosition().y - model.getOrigin().y*scale-scale;
+		
+		if(!root){
+			//so
+			//adding origin HERE
+			//then removing it in offset down there
+			//actually fixes the rounding error????
+			addx = (model.getTransformedPosition().x) * scale + offsetx + model.getOrigin().x*scale;
+			addy = (model.getTransformedPosition().y) * scale  + offsety + model.getOrigin().y*scale;
 			
 			if(round){
-				tx = (int)tx;
-				ty = (int)ty;
+				addx = (int)addx;
+				addy = (int)addy;
 			}
 			
-			//polybatch.getTransformMatrix().translate(x, y, 0);
-			polybatch.getTransformMatrix().setToTranslation(tx, ty, 0);
+			//addx -= model.getOrigin().x;
+			//addy -= model.getOrigin().y;
 		}else{
-			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale*1, 0);
+			addx = model.getTransformedPosition().x;
+			addy = model.getTransformedPosition().y;
 		}
-		
-		polybatch.getTransformMatrix().scale(scale, scale, 1f);
-		polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation );
-		
-		polybatch.begin();
 		
 		for(SoftModel child : model.getChildren()){
 			if(child.underparent)
-			renderModel(child, model);
+			renderModel(child, false, addx, addy);
 		}
+
 		
-		if(parent == null){
-			polybatch.end();
-			polybatch.getTransformMatrix().setToTranslation(model.getPosition().x, model.getPosition().y - scale*1, 0);
-			polybatch.getTransformMatrix().scale(scale, scale, 1f);
-			polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation );
-			polybatch.begin();
-		}
+		polybatch.getTransformMatrix().setToTranslation(addx, addy, 0);
+		polybatch.getTransformMatrix().scale(scale, scale, 1f);
+		polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation);
+
 		
-		Vector2 offset = vector.set(0, 0);;
-		if(parent != null) offset.set(model.getOrigin());
+		polybatch.begin();
+		
+		Vector2 offset = vector.set(0, 0);
+		
+		//what the hell? shouldn't these cancel out? why does this even exist?
+		//why was this added in the first place?
+		if(!root) offset.set(model.getOrigin());
 		
 		if(model.side){
 			offset.y -= 0.06f*scale;
 		}
+		
+		if(root)
+			offset.y += 1;
 		
 		if(model.side){
 			polybatch.draw(model.getRegion(), -offset.x, -offset.y, 
@@ -152,10 +160,13 @@ public class SoftModelRenderer{
 					model.getTexture().getWidth(), model.getTexture().getHeight());
 		}
 		
+		polybatch.end();
+		
 		for(SoftModel child : model.getChildren()){
 			if(!child.underparent)
-			renderModel(child, model);
+			renderModel(child, false, addx, addy);
 		}
+		
 	}
 	
 	public void setSize(int width, int height){

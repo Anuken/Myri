@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.bitfire.postprocessing.PostProcessor;
@@ -38,12 +39,15 @@ public class WorldRenderer extends RendererModule<Myri>{
 	Body playerbody;
 	Player player;
 	float accumulator;
+	SoftModel test;
 	
 	public WorldRenderer() {
 		ShaderLoader.BasePath = "shaders/";
 		
 		cameraScale = 2f;
 		Textures.load("textures/parts1/");
+		
+		test = new SoftModel(Textures.get("head"), 5);
 
 		srenderer.debug = false;
 		srenderer.round = pixel;
@@ -97,10 +101,16 @@ public class WorldRenderer extends RendererModule<Myri>{
 		
 		processor.capture();
 		clearScreen();
+		
+		Vector3 v = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+		test.setPosition((v.x), (v.y));
+		test.updateTransformedPosition();
 
 		srenderer.setProjectionMatrix(camera.combined);
 		
 		player.render(srenderer);
+		
+		//srenderer.render(test);
 		
 		//if(srenderer.debug)
 		//debug.render(world, camera.combined);

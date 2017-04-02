@@ -56,6 +56,7 @@ public class WalkAnimation extends ModelAnimation{
 			bone.y = (float) (Math.sin((b+=2f) / 10f + t)) * b/9f*bodymove;
 		}
 		
+		model.updateTransformedPosition();
 		model.updateBonesRecursive();
 	}
 }

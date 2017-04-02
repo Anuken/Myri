@@ -26,6 +26,9 @@ public class ModelData{
 		rotated = p.rotated;
 		under = p.under;
 		position = new Vector2(p.getX() + p.texture.texture.getWidth()*5 - Gdx.graphics.getWidth()/2, p.getY() + p.texture.texture.getHeight()*5 - Gdx.graphics.getHeight()/2);
+		
+		origin.x = (int)origin.x;
+		origin.y = (int)origin.y;
 	}
 
 	public SoftModel asModel(){

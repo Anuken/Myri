@@ -160,11 +160,11 @@ public class SoftModel{
 	}
 
 	public void updateBones(){
+		
 		float yw = texture.getHeight();
 		float[] vertices = region.getVertices();
 		//super fancy resetting
 		upper.set(lower.set(diff.set(0,0)));
-		
 		
 		for(int i = 0; i <= vw; i ++){
 			Vector2 bone = bones[i];
@@ -229,7 +229,9 @@ public class SoftModel{
 				bone1 = bones[i - 1];
 				bone2 = bones[i];
 			}
-
+			
+			child.updateTransformedPosition();
+			
 			Vector2 sub = child.getTransformedPosition().set(bone2).sub(bone1);
 			sub.setLength(rorig.y);
 			float angle = sub.angle();
