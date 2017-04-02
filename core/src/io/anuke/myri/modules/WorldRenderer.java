@@ -28,36 +28,39 @@ import io.anuke.ucore.util.Timers;
 
 public class WorldRenderer extends RendererModule<Myri>{
 	Box2DDebugRenderer debug = new Box2DDebugRenderer();
-	boolean pixel = false;
-	public OrthogonalTiledMapRenderer trenderer;
-	public TiledMap map;
-	public SoftModelRenderer srenderer = new SoftModelRenderer();
-	public World world = new World(new Vector2(0, -200), true);
-	public SoftModel model;
-	public PostProcessor processor;
+	OrthogonalTiledMapRenderer trenderer;
+	TiledMap map;
+	SoftModelRenderer srenderer = new SoftModelRenderer();
+	World world = new World(new Vector2(0, -200), true);
+	SoftModel model;
+	PostProcessor processor;
 	GifRecorder recorder = new GifRecorder(batch);
 	PixelateEffect effect;
 	ModelAnimation animation = new WalkAnimation();
 	Body playerbody;
 	Player player;
-	float accumulator;
 	SoftModel test;
 	FrameBufferMap buffers = new FrameBufferMap();
 	
+	float accumulator;
+	
+	boolean pixel = true;
+	
+
 	public WorldRenderer() {
 		ShaderLoader.BasePath = "shaders/";
-		
+
 		cameraScale = 2f;
 		Textures.load("textures/parts1/");
-		
+
 		test = new SoftModel(Textures.get("head"), 5);
 
 		srenderer.debug = false;
-		srenderer.round = pixel;
+		srenderer.round = false;
 
 		model = Resources.loadModel(Gdx.files.local("model1.json"));
-		
-		buffers.add("pixel", 1440/4, 849/4);
+
+		buffers.add("pixel", 1440 / 4, 849 / 4);
 
 		setupPlayer();
 
@@ -72,7 +75,7 @@ public class WorldRenderer extends RendererModule<Myri>{
 
 		{
 			Body floor = body(BodyType.StaticBody, 0, -40);
-			
+
 			PolygonShape box = new PolygonShape();
 			box.setAsBox(1000, 2);
 			floor.createFixture(fixture(box, 3));
@@ -90,46 +93,51 @@ public class WorldRenderer extends RendererModule<Myri>{
 		playerbody.createFixture(fixture(bodys, 1));
 
 		bodys.dispose();
-		
+
 		player = new Player(model, playerbody);
 	}
 
 	public void update(){
-		if(processor == null) return;
-		
+		if(processor == null)
+			return;
+
 		Timers.update(Gdx.graphics.getDeltaTime());
-		
+
 		camera.position.set(0, 0, 0);
 		camera.update();
 
 		player.update();
-		
+
 		processor.capture();
 		clearScreen();
-		
+
 		Vector3 v = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 		test.setPosition((v.x), (v.y));
 		test.updateTransformedPosition();
 
 		srenderer.setProjectionMatrix(camera.combined);
-		
-		buffers.begin("pixel");
+
+		if(pixel)
+			buffers.begin("pixel");
+
 		clearScreen(Color.CLEAR);
 		player.render(srenderer);
-		buffers.end("pixel");
-		
-		batch.begin();
-		batch.draw(buffers.texture("pixel"), 0, Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), -Gdx.graphics.getHeight());
-		batch.end();
+
+		if(pixel){
+			buffers.end("pixel");
+			batch.begin();
+			batch.draw(buffers.texture("pixel"), 0, Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), -Gdx.graphics.getHeight());
+			batch.end();
+		}
 		//srenderer.render(test);
-		
+
 		//if(srenderer.debug)
 		//debug.render(world, camera.combined);
-		
+
 		processor.render();
 
 		stepWorld(Gdx.graphics.getDeltaTime());
-		
+
 		batch.begin();
 		recorder.update();
 		batch.end();
@@ -173,7 +181,7 @@ public class WorldRenderer extends RendererModule<Myri>{
 		def.position.set(x, y);
 		return world.createBody(def);
 	}
-	
+
 	public void resize(int width, int height){
 		super.resize(width, height);
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
@@ -183,10 +191,7 @@ public class WorldRenderer extends RendererModule<Myri>{
 		}
 		processor = new PostProcessor();
 		effect = new PixelateEffect();
-		
-		if(pixel)
-		processor.addEffect(effect);
-		
+
 		processor.getCombinedBuffer().buffer1.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		processor.getCombinedBuffer().buffer2.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 	}

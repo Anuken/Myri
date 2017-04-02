@@ -38,6 +38,12 @@ public class SoftModel{
 		resetVertices(defaultVertices());
 	}
 	
+	public void resetTexture(Texture tex){
+		this.texture = tex;
+		tregion = new TextureRegion(texture);
+		resetVertices(defaultVertices());
+	}
+	
 	public float getBoneSpacing(){
 		return (float)texture.getWidth()/vw;
 	}
@@ -110,6 +116,19 @@ public class SoftModel{
 	public SoftModel getChild(String name){
 		for(SoftModel model : children)
 			if(model.getName().equals(name)) return model;
+		
+		return null;
+	}
+	
+	public SoftModel findChild(String name){
+		for(SoftModel model : children){
+			if(model.getName().equals(name))
+				return model;
+			else{
+				SoftModel found = model.findChild(name);
+				if(found != null) return found;
+			}
+		}
 		
 		return null;
 	}
