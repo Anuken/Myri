@@ -103,8 +103,7 @@ public class SoftModelRenderer{
 	private void renderModel(SoftModel model, boolean root, float offsetx, float offsety){
 		float scale = model.getScale();
 
-		float addx = offsetx+model.getTransformedPosition().x - model.getOrigin().x*scale, 
-				addy = offsety+model.getTransformedPosition().y - model.getOrigin().y*scale-scale;
+		float addx = 0, addy = 0;
 		
 		float raddx = 0, raddy = 0;
 		

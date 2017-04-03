@@ -150,7 +150,9 @@ public class ModelEditor extends SceneModule<Myri>{
 		if(data.children == null) return;
 		
 		for(ModelData d : data.children){
-			stage.addActor(d.asWidget());
+			Part part = d.asWidget();
+			part.parentname = data.name;
+			stage.addActor(part);
 			addWidgets(d);
 		}
 	}

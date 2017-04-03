@@ -4,7 +4,7 @@ import io.anuke.myri.modules.*;
 import io.anuke.ucore.modules.ModuleController;
 
 public class Myri extends ModuleController<Myri>{
-	int type = 2;
+	int type = 0;
 
 	@Override
 	public void init(){
