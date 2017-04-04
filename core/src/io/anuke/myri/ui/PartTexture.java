@@ -56,7 +56,7 @@ public class PartTexture extends Actor{
 				ModelEditor.i.setSelected(part);
 				part.setShown(true);
 
-				return false;
+				return true;
 			}
 
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){

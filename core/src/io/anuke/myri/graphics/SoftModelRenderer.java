@@ -23,8 +23,10 @@ public class SoftModelRenderer{
 	}
 
 	public void render(SoftModel model){
-	
+		
+		polybatch.begin();
 		renderModel(model, true, 0, 0);
+		polybatch.end();
 		
 		if(debug){
 			shape.begin(ShapeType.Line);
@@ -119,8 +121,8 @@ public class SoftModelRenderer{
 				raddy = addy;
 			}
 		}else{
-			addx = model.getTransformedPosition().x;
-			addy = model.getTransformedPosition().y;
+			addx = model.getPosition().x;
+			addy = model.getPosition().y;
 			raddx = addx;
 			raddy = addy;
 		}
@@ -130,30 +132,30 @@ public class SoftModelRenderer{
 			renderModel(child, false, addx, addy);
 		}
 		
-		polybatch.getTransformMatrix().setToTranslation(raddx, raddy, 0);
-		polybatch.getTransformMatrix().scale(scale, scale, 1f);
-		polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation);
+		//polybatch.getTransformMatrix().setToTranslation(raddx, raddy, 0);
+		//polybatch.getTransformMatrix().scale(scale, scale, 1f);
+		//polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation);
 		
-		polybatch.begin();
+	//	polybatch.begin();
 		
 		Vector2 offset = vector.set(0, 0);
 		
 		if(model.side){
-		//	offset.y -= 0.06f*scale;
+		//	offset.y -= 0.5f;
 		}
 		
-		if(root)
-			offset.y += 1;
+		//if(root)
+		//	offset.y += 1;
 		
-		if(model.side){
-			polybatch.draw(model.getRegion(), -offset.x, -offset.y, 
-					0,0,model.getTexture().getWidth(), model.getTexture().getHeight(),1,1, -90);
-		}else{
-			polybatch.draw(model.getRegion(), -offset.x, -offset.y, 
-					model.getTexture().getWidth(), model.getTexture().getHeight());
-		}
+		if(model.side)
+			offset.y -= 0.07f*scale;
 		
-		polybatch.end();
+
+		polybatch.draw(model.getRegion(), raddx-offset.x, raddy-offset.y, 0, 0,
+				model.getTexture().getWidth(), model.getTexture().getHeight(), scale, scale, model.side ? -90 : 0);
+		
+		
+		//polybatch.end();
 		
 		for(SoftModel child : model.getChildren()){
 			if(!child.underparent)

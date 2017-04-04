@@ -171,10 +171,10 @@ public class SoftModel{
 		return region.getVertices();
 	}
 	
-	public void updateBonesRecursive(){
+	public void updateAll(){
 		updateBones();
 		for(SoftModel m : children){
-			m.updateBonesRecursive();
+			m.updateAll();
 		}
 	}
 
@@ -232,8 +232,8 @@ public class SoftModel{
 		*/
 
 		for(SoftModel child : children){
-			Vector2 rorig = child.getPosition().cpy().add(child.getOrigin()); //relative origin
-
+			Vector2 rorig = diff.set(child.getPosition()).add(child.getOrigin()); //relative origin
+			
 			float s = (rorig.x + getWidth() / 2) / getWidth();
 
 			Vector2 bone1 = null;
@@ -249,20 +249,35 @@ public class SoftModel{
 				bone2 = bones[i];
 			}
 			
-			child.updateTransformedPosition();
-			
 			Vector2 sub = child.getTransformedPosition().set(bone2).sub(bone1);
+			
 			sub.setLength(rorig.y);
-			float angle = sub.angle();
-
+			
 			if(child.rotate){
-				child.rotation = angle;
+				child.rotation = sub.angle();
 			}
 
 			sub.rotate(child.getPosition().y < 0 ? -90 : 90);
+			
+			if(side)
+				sub.rotate(-90);
+			
 			sub.add(rorig.x + (bone1.x-defaultX(i == 0 ? i : i - 1f)), bone2.y);
+			
 			sub.sub(child.origin);
+			
+			if(side){
+				flip(sub);
+				sub.sub(-child.origin.y, 0);
+				; //???
+			}
 		}
+	}
+	
+	private void flip(Vector2 vector){
+		float temp = vector.x;
+		vector.x = vector.y;
+		vector.y = temp;
 	}
 
 	private void resetVertices(float[] vertices){

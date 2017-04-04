@@ -29,6 +29,7 @@ import io.anuke.scene.Layout;
 import io.anuke.scene.SceneModule;
 import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.graphics.Textures;
+import io.anuke.ucore.util.Timers;
 
 public class ModelEditor extends SceneModule<Myri>{
 	public static ModelEditor i;
@@ -140,6 +141,7 @@ public class ModelEditor extends SceneModule<Myri>{
 
 			model = Resources.loadModel(Gdx.files.local("model1.json"), false);
 			model.setPosition(Gdx.graphics.getWidth() / 6, 50);
+			model.updateTransformedPosition();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -181,6 +183,8 @@ public class ModelEditor extends SceneModule<Myri>{
 
 		namefield = l.field("legb", (text) -> {
 			selected.name = text;
+			if(Textures.exists(text))
+			selected.updateTexture();
 		});
 
 		parentfield = l.field("body", (text) -> {
@@ -265,19 +269,22 @@ public class ModelEditor extends SceneModule<Myri>{
 		if(Gdx.input.isKeyJustPressed(Keys.D))
 			renderer.debug = !renderer.debug;
 
+		
+		Timers.update(Gdx.graphics.getDeltaTime());
+		
 		clearScreen(Color.BLACK);
 		act();
 
 		if(model != null){
-		//	anim.update(model);
-			model.updateBonesRecursive();
+			anim.update(model);
+			model.updateAll();
 
 			renderer.render(model);
 		}
 
-		stage.getBatch().begin();
-		recorder.update();
-		stage.getBatch().end();
+		//stage.getBatch().begin();
+		//recorder.update();
+		//stage.getBatch().end();
 	}
 
 	@Override

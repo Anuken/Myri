@@ -15,7 +15,7 @@ import com.bitfire.utils.ShaderLoader;
 import io.anuke.gif.GifRecorder;
 import io.anuke.myri.Myri;
 import io.anuke.myri.animation.ModelAnimation;
-import io.anuke.myri.animation.WalkAnimation;
+import io.anuke.myri.animation.TestAnimation;
 import io.anuke.myri.entities.Player;
 import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
@@ -36,7 +36,7 @@ public class WorldRenderer extends RendererModule<Myri>{
 	PostProcessor processor;
 	GifRecorder recorder = new GifRecorder(batch);
 	PixelateEffect effect;
-	ModelAnimation animation = new WalkAnimation();
+	ModelAnimation animation = new TestAnimation();
 	Body playerbody;
 	Player player;
 	SoftModel test;

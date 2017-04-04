@@ -23,7 +23,7 @@ public class WalkAnimation extends ModelAnimation{
 		float t = time / 10f * speed;
 
 		model.forEachChild("leg", (leg) -> {
-
+			if(leg.getName().contains("joint"))return;
 			float step = ((i == 2 || i == 1) ? 0 : 10) + i * 3;
 
 			int index = 0;
@@ -72,6 +72,6 @@ public class WalkAnimation extends ModelAnimation{
 		}
 
 		model.updateTransformedPosition();
-		model.updateBonesRecursive();
+		model.updateAll();
 	}
 }
