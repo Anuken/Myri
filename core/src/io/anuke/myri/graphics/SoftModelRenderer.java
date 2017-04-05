@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import io.anuke.ucore.graphics.ShapeUtils;
 import io.anuke.ucore.util.Geometry;
 
 public class SoftModelRenderer{
@@ -26,13 +27,8 @@ public class SoftModelRenderer{
 		
 		polybatch.begin();
 		renderModel(model, true, 0, 0);
+		if(debug)renderDebug(model, true, 0, 0);
 		polybatch.end();
-		
-		if(debug){
-			shape.begin(ShapeType.Line);
-			renderDebug(model, null);
-			shape.end();
-		}
 	}
 
 	private void renderDebug(SoftModel model, SoftModel parent){
@@ -101,6 +97,80 @@ public class SoftModelRenderer{
 			renderDebug(child, model);
 		}
 	}
+	
+	private void renderDebug(SoftModel model, boolean root, float offsetx, float offsety){
+		float scale = model.getScale();
+
+		float addx = 0, addy = 0;
+		
+		float raddx = 0, raddy = 0;
+		
+		if(!root){
+			addx = (model.getTransformedPosition().x) * scale + offsetx;
+			addy = (model.getTransformedPosition().y) * scale  + offsety;
+			
+			if(round){
+				raddx = (int)(addx + model.getOrigin().x) - model.getOrigin().x;
+				raddy = (int)(addy + model.getOrigin().y) - model.getOrigin().y;
+			}else{
+				raddx = addx;
+				raddy = addy;
+			}
+		}else{
+			addx = model.getPosition().x;
+			addy = model.getPosition().y;
+			raddx = addx;
+			raddy = addy;
+		}
+		
+		for(SoftModel child : model.getChildren()){
+			if(child.underparent)
+			renderDebug(child, false, addx, addy);
+		}
+		Vector2 offset = vector.set(0, 0);
+		//if(root)
+		//	offset.y += 1;
+		
+		
+		if(model.side)
+			offset.y -= 0.07f*scale;
+		
+		polybatch.setColor(Color.YELLOW);
+		
+		float fx = raddx-offset.x, fy = raddy-offset.y;
+		
+		Geometry.iteratePolySegments(model.getVertices(), (x,y,x2,y2)->{
+			
+			x *= scale;
+			y *= scale;
+			x2 *= scale;
+			y2 *= scale;
+			
+			if(!model.side){
+				ShapeUtils.line(polybatch, x+fx, y+fy, x2+fx, y2+fy);
+			}else{
+				ShapeUtils.line(polybatch, y+fx, -x+fy, y2+fx, -x2+fy);
+			}
+		});
+		
+		polybatch.setColor(Color.PURPLE);
+		
+		for(int i = 0;i < model.getBones().length - 1;i ++){
+			if(!model.side){
+				ShapeUtils.line(polybatch, scale*model.getBones()[i].x+fx,scale*model.getBones()[i].y+fy,fx+ scale*model.getBones()[i + 1].x, fy+scale*model.getBones()[i + 1].y);
+			}else{
+				ShapeUtils.line(polybatch, fx+scale*model.getBones()[i].y, fy-scale*model.getBones()[i].x, fx+scale*model.getBones()[i+1].y, fy-scale*model.getBones()[i+1].x);
+			}
+		}
+		
+		polybatch.setColor(Color.WHITE);
+		
+		for(SoftModel child : model.getChildren()){
+			if(!child.underparent)
+			renderDebug(child, false, addx, addy);
+		}
+		
+	}
 
 	private void renderModel(SoftModel model, boolean root, float offsetx, float offsety){
 		float scale = model.getScale();
@@ -131,31 +201,17 @@ public class SoftModelRenderer{
 			if(child.underparent)
 			renderModel(child, false, addx, addy);
 		}
-		
-		//polybatch.getTransformMatrix().setToTranslation(raddx, raddy, 0);
-		//polybatch.getTransformMatrix().scale(scale, scale, 1f);
-		//polybatch.getTransformMatrix().rotate(Vector3.Z, model.rotation);
-		
-	//	polybatch.begin();
-		
 		Vector2 offset = vector.set(0, 0);
-		
-		if(model.side){
-		//	offset.y -= 0.5f;
-		}
-		
 		//if(root)
 		//	offset.y += 1;
+		
 		
 		if(model.side)
 			offset.y -= 0.07f*scale;
 		
-
+		
 		polybatch.draw(model.getRegion(), raddx-offset.x, raddy-offset.y, 0, 0,
 				model.getTexture().getWidth(), model.getTexture().getHeight(), scale, scale, model.side ? -90 : 0);
-		
-		
-		//polybatch.end();
 		
 		for(SoftModel child : model.getChildren()){
 			if(!child.underparent)
