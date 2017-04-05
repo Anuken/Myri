@@ -269,7 +269,7 @@ public class SoftModel{
 			if(side){
 				flip(sub);
 				sub.sub(-child.origin.y, 0);
-				; //???
+				sub.y -= (bone1.x-defaultX(i == 0 ? i : i - 1f))*2;
 			}
 		}
 	}
