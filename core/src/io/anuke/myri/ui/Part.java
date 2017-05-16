@@ -2,11 +2,12 @@ package io.anuke.myri.ui;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.widget.VisTable;
 
-public class Part extends VisTable{
+import io.anuke.ucore.scene.Element;
+import io.anuke.ucore.scene.ui.layout.Table;
+
+public class Part extends Table{
 	public PartTexture texture;
 	public Vector2 origin = new Vector2();
 	public String name = "body", parentname = "body";
@@ -33,7 +34,7 @@ public class Part extends VisTable{
 	}
 	
 	public void setShown(boolean shown){
-		for(Actor child : getChildren()){
+		for(Element child : getChildren()){
 			if( !(child instanceof PartTexture)) child.setVisible(shown);
 		}
 

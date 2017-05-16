@@ -50,7 +50,7 @@ public class WorldRenderer extends RendererModule<Myri>{
 	public WorldRenderer() {
 		ShaderLoader.BasePath = "shaders/";
 
-		cameraScale = 2f;
+		cameraScale = 2;
 		Textures.load("textures/parts1/");
 
 		test = new SoftModel(Textures.get("head"), 5);

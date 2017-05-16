@@ -2,49 +2,40 @@ package io.anuke.myri.modules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.VisUI.SkinScale;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisImageButton;
-import com.kotcrab.vis.ui.widget.VisTextField;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.myri.Myri;
 import io.anuke.myri.animation.ModelAnimation;
-import io.anuke.myri.animation.WalkAnimation;
+import io.anuke.myri.animation.TestAnimation;
 import io.anuke.myri.graphics.SoftModel;
 import io.anuke.myri.graphics.SoftModelRenderer;
 import io.anuke.myri.io.ModelData;
 import io.anuke.myri.io.Resources;
 import io.anuke.myri.ui.Part;
-import io.anuke.scene.Layout;
-import io.anuke.scene.SceneModule;
-import io.anuke.ucore.graphics.ShapeUtils;
+import io.anuke.ucore.core.DrawContext;
 import io.anuke.ucore.graphics.Textures;
+import io.anuke.ucore.modules.SceneModule;
+import io.anuke.ucore.scene.builders.*;
+import io.anuke.ucore.scene.ui.CheckBox;
+import io.anuke.ucore.scene.ui.TextField;
 import io.anuke.ucore.util.Timers;
 
 public class ModelEditor extends SceneModule<Myri>{
 	public static ModelEditor i;
-	boolean setup = false;
 
 	Part selected;
 
 	SoftModel model;
 	SoftModelRenderer renderer;
-	ModelAnimation anim = new WalkAnimation();
+	ModelAnimation anim = new TestAnimation();
 	GifRecorder recorder;
 
-	VisTextField namefield, parentfield;
-	VisCheckBox rotatebox, editbox, underbox;
-	Layout wlayout, slayout;
+	TextField namefield, parentfield;
+	CheckBox rotatebox, editbox, underbox;
 
 	public ModelEditor() {
 		i = this;
@@ -52,77 +43,54 @@ public class ModelEditor extends SceneModule<Myri>{
 		renderer.debug = true;
 		renderer.round = false;
 		Textures.load("textures/parts1/");
-		VisUI.load(SkinScale.X2);
-		ShapeUtils.region = VisUI.getSkin().getRegion("white");
-		recorder = new GifRecorder((SpriteBatch) stage.getBatch());
-		InputMultiplexer plex = new InputMultiplexer();
-		plex.addProcessor(this);
-		plex.addProcessor(stage);
-		Gdx.input.setInputProcessor(plex);
+		recorder = new GifRecorder(DrawContext.batch);
 	}
 
-	public void setup(){
-		setup = true;
+	public void init(){
+		
+		build.begin();
+		
+		new table(){{
+			atop();
+			aright();
+			
+			new button("New Part", () -> {
+				Part widget = new Part();
+				widget.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+				if(selected == null)
+					selected = widget;
+				scene.add(widget);
+			});
 
-		Layout l = fill();
-		slayout = l;
-		l.top().right();
+			new button("Save", () -> {
 
-		l.$button("New Part", () -> {
-			Part widget = new Part();
-			widget.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-			if(selected == null)
-				selected = widget;
-			stage.addActor(widget);
-		});
+				Array<Part> parts = $list(Part.class);
+				ObjectMap<String, Array<Part>> map = new ObjectMap<>();
 
-		l.$button("Save", () -> {
-
-			Array<Part> parts = $list(Part.class);
-			ObjectMap<String, Array<Part>> map = new ObjectMap<>();
-
-			for(Part part : parts){
-				String parent = part.parentname;
-				
-				Array<Part> ch = null;
-				
-				if(map.containsKey(parent)){
-					ch = map.get(parent);
-				}else{
-					ch = new Array<>();
-					map.put(parent, ch);
+				for(Part part : parts){
+					String parent = part.parentname;
+					
+					Array<Part> ch = null;
+					
+					if(map.containsKey(parent)){
+						ch = map.get(parent);
+					}else{
+						ch = new Array<>();
+						map.put(parent, ch);
+					}
+					
+					ch.add(part);
+					
 				}
 				
-				ch.add(part);
+				ModelData data = getData($("mainpart"), map);
+				Gdx.files.local("model1.json").writeString(Resources.json().toJson(data), false);
 				
-			}
-			
-			ModelData data = getData($("mainpart"), map);
-			Gdx.files.local("model1.json").writeString(Resources.json().toJson(data), false);
-			
-			log("File written.");
-			/*
-			Array<ModelData> children = new Array<ModelData>();
-			ModelData main = new ModelData(selected);
-			for(Actor actor : stage.getActors()){
-				if(!(actor instanceof Part))
-					continue;
-
-				Part p = (Part) actor;
-				ModelData data = null;
-				if(p != selected){
-					data = new ModelData(p);
-					children.add(data);
-				}else{
-					data = main;
-					data.children = children;
-				}
-			}
-			String string = Resources.json().toJson(main);
-			Gdx.files.local("model1.json").writeString(string, false);
-			
-			 */
-		});
+				log("File written.");
+			});
+		}};
+		
+		build.end();
 
 		setupParts();
 
@@ -131,7 +99,7 @@ public class ModelEditor extends SceneModule<Myri>{
 			
 			Part w = data.asWidget();
 			w.setName("mainpart");
-			stage.addActor(w);
+			scene.add(w);
 			
 			addWidgets(data);
 			
@@ -154,7 +122,7 @@ public class ModelEditor extends SceneModule<Myri>{
 		for(ModelData d : data.children){
 			Part part = d.asWidget();
 			part.parentname = data.name;
-			stage.addActor(part);
+			scene.add(part);
 			addWidgets(d);
 		}
 	}
@@ -176,55 +144,58 @@ public class ModelEditor extends SceneModule<Myri>{
 	}
 
 	void setupParts(){
-		Layout l = fill();
-		l.touch(Touchable.disabled);
+		
+		new table(){{
+			
+			atop();
+			aleft();
+			
+			new field("legb", (text) -> {
+				selected.name = text;
+				if(Textures.exists(text))
+				selected.updateTexture();
+			}){{namefield = get();}}
+			.fillY();
+			
+			new imagebutton("icon-arrow-right", () -> {
+				selected.toFront();
+			});
 
-		wlayout = l;
+			new imagebutton("icon-arrow-left", () -> {
+				selected.toBack();
+			});
+			
+			row();
+			
+			new field("body", (text) -> {
+				selected.parentname = text;
+			}){{parentfield = get();}}
+			.fillY();
+			
+			new label(":Parent").colspan(2);
+			
+			row();
+			
+			new checkbox("Edit", (b) -> {
+				selected.edit = b;
+			}){{editbox = get();}}
+			.colspan(3).left();
+			
+			row();
 
-		namefield = l.field("legb", (text) -> {
-			selected.name = text;
-			if(Textures.exists(text))
-			selected.updateTexture();
-		});
+			new checkbox("Rotated", (b) -> {
+				selected.rotated = b;
+			}){{rotatebox = get();}}
+			.colspan(3).left();
+			
+			row();
 
-		parentfield = l.field("body", (text) -> {
-			selected.parentname = text;
-		});
+			new checkbox("Under", (b) -> {
+				selected.under = b;
+			}){{underbox = get();}}
+			.colspan(3).left();
+		}};
 
-		rotatebox = l.check("Rotated", (b) -> {
-			selected.rotated = b;
-		});
-
-		editbox = l.check("Edit", (b) -> {
-			selected.edit = b;
-		});
-
-		underbox = l.check("Under", (b) -> {
-			selected.under = b;
-		});
-
-		VisImageButton down = l.ibutton("icon-arrow-right", () -> {
-			selected.toFront();
-		});
-
-		VisImageButton up = l.ibutton("icon-arrow-left", () -> {
-			selected.toBack();
-		});
-
-		l.top().left();
-
-		l.$(namefield).fillY();
-		l.$(up);
-		l.$(down);
-		l.row();
-		l.$(parentfield).fillY();
-		l.$text(":Parent").colspan(2).row();
-
-		l.$(editbox).colspan(3).align(Align.left);
-		l.row();
-		l.$(underbox).colspan(3).align(Align.left);
-		l.row();
-		l.$(rotatebox).colspan(3).align(Align.left);
 	}
 
 	public void setSelected(Part widget){
@@ -237,9 +208,6 @@ public class ModelEditor extends SceneModule<Myri>{
 		editbox.setChecked(widget.edit);
 		rotatebox.setChecked(widget.rotated);
 		underbox.setChecked(widget.under);
-		wlayout.touch(Touchable.enabled);
-		
-		slayout.table().toFront();
 	}
 
 	public void updateBones(boolean flip, float w, float h, Vector2[] bones, String name){
@@ -264,8 +232,6 @@ public class ModelEditor extends SceneModule<Myri>{
 	public void update(){
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE))
 			Gdx.app.exit();
-		if(Gdx.graphics.getFrameId() == 2 && !setup)
-			setup();
 		if(Gdx.input.isKeyJustPressed(Keys.D))
 			renderer.debug = !renderer.debug;
 

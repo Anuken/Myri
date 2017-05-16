@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
-import com.kotcrab.vis.ui.VisUI;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.myri.Myri;
@@ -18,6 +17,7 @@ import io.anuke.myri.io.Resources;
 import io.anuke.myri.shaders.PixelateEffect;
 import io.anuke.ucore.graphics.Textures;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.scene.style.Styles;
 
 public class PreviewRenderer extends Module<Myri>{
 	public SoftModel model;
@@ -73,10 +73,10 @@ public class PreviewRenderer extends Module<Myri>{
 			renderer.render(model);
 
 		if(editMode)
-			getModule(ModelEditor.class).stage.draw();
+			getModule(ModelEditor.class).scene.draw();
 
 		batch.begin();
-		batch.draw(VisUI.getSkin().getRegion("white"), Gdx.graphics.getWidth() / 2 - 2,
+		batch.draw(Styles.styles.getRegion("white"), Gdx.graphics.getWidth() / 2 - 2,
 				Gdx.graphics.getHeight() / 2 - 2, 4, 4);
 		
 		if(!editMode) recorder.update();

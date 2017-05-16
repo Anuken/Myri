@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import io.anuke.ucore.graphics.ShapeUtils;
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.util.Geometry;
 
 public class SoftModelRenderer{
@@ -147,9 +147,9 @@ public class SoftModelRenderer{
 			y2 *= scale;
 			
 			if(!model.side){
-				ShapeUtils.line(polybatch, x+fx, y+fy, x2+fx, y2+fy);
+				Draw.line(x+fx, y+fy, x2+fx, y2+fy);
 			}else{
-				ShapeUtils.line(polybatch, y+fx, -x+fy, y2+fx, -x2+fy);
+				Draw.line(y+fx, -x+fy, y2+fx, -x2+fy);
 			}
 		});
 		
@@ -157,9 +157,9 @@ public class SoftModelRenderer{
 		
 		for(int i = 0;i < model.getBones().length - 1;i ++){
 			if(!model.side){
-				ShapeUtils.line(polybatch, scale*model.getBones()[i].x+fx,scale*model.getBones()[i].y+fy,fx+ scale*model.getBones()[i + 1].x, fy+scale*model.getBones()[i + 1].y);
+				Draw.line(scale*model.getBones()[i].x+fx,scale*model.getBones()[i].y+fy,fx+ scale*model.getBones()[i + 1].x, fy+scale*model.getBones()[i + 1].y);
 			}else{
-				ShapeUtils.line(polybatch, fx+scale*model.getBones()[i].y, fy-scale*model.getBones()[i].x, fx+scale*model.getBones()[i+1].y, fy-scale*model.getBones()[i+1].x);
+				Draw.line(fx+scale*model.getBones()[i].y, fy-scale*model.getBones()[i].x, fx+scale*model.getBones()[i+1].y, fy-scale*model.getBones()[i+1].x);
 			}
 		}
 		

@@ -6,15 +6,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import io.anuke.myri.modules.ModelEditor;
-import io.anuke.ucore.graphics.ShapeUtils;
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.graphics.Textures;
+import io.anuke.ucore.scene.Element;
+import io.anuke.ucore.scene.event.InputEvent;
+import io.anuke.ucore.scene.event.InputListener;
 
-public class PartTexture extends Actor{
+public class PartTexture extends Element{
 	public Texture texture;
 	public boolean outline = true;
 	public Vector2[] bones = new Vector2[6];
@@ -108,36 +108,35 @@ public class PartTexture extends Actor{
 
 	public void draw(Batch batch, float alpha){
 		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
-		batch.setColor(Color.CORAL);
+		Draw.color(Color.CORAL);
 		if(outline){
-			ShapeUtils.rect(batch, getX(), getY(), getWidth(), getHeight(), 2);
+			Draw.linerect(getX(), getY(), getWidth(), getHeight(), 2);
 			int s = 4;
 			batch.setColor(Color.GREEN);
-			ShapeUtils.rect(batch, getX() + getWidth() / 2 + part.origin.x - s, getY() + getHeight() / 2 + part.origin.y - s, s * 2, s * 2, 2);
+			Draw.linerect(getX() + getWidth() / 2 + part.origin.x - s, getY() + getHeight() / 2 + part.origin.y - s, s * 2, s * 2, 2);
 			drawBones(batch);
 		}
-		batch.setColor(Color.WHITE);
+		Draw.color(Color.WHITE);
 	}
 
 	void drawBones(Batch batch){
-		ShapeUtils.thickness = 2;
 
 		float ofx = getX() + getWidth() / 2;
 		float ofy = getY() + getHeight() / 2;
 
 		batch.setColor(Color.YELLOW);
 		for(int i = 0; i < bones.length - 1; i++){
-			ShapeUtils.line(batch, bones[i].x + ofx, bones[i].y + ofy, bones[i + 1].x + ofx, bones[i + 1].y + ofy);
+			Draw.line(bones[i].x + ofx, bones[i].y + ofy, bones[i + 1].x + ofx, bones[i + 1].y + ofy);
 		}
 
 		float s = 6;
 
 		int i = 0;
 		for(Vector2 v : bones){
-			batch.setColor(i++ == selected ? Color.CYAN : Color.RED);
-			ShapeUtils.rect(batch, ofx + v.x - s, ofy + v.y - s, s * 2, s * 2, 2);
+			Draw.color(i++ == selected ? Color.CYAN : Color.RED);
+			Draw.linerect(ofx + v.x - s, ofy + v.y - s, s * 2, s * 2, 2);
 		}
 
-		batch.setColor(Color.WHITE);
+		Draw.color(Color.WHITE);
 	}
 }
